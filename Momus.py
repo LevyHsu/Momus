@@ -39,8 +39,8 @@ def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_N
             image_processing.keypoint_white_black_salt(original_img_path,Salt_and_pepper_Noise_level)
         
         window.Element('-TEXT-').Update(value=("----------------------------\n第"+str(counter_current)+"次迭代\n"), append=False)
-        #图片|处理后图片
         
+        #图片|处理后图片
         if(loop == 0):
             hmerge = np.hstack((cv2.imread(original_img_path), cv2.imread('temp_1.png')))
             cv2.imwrite('temp_A.png', hmerge)
@@ -80,9 +80,8 @@ def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_N
     sg.Popup('完成')
     cv2.imwrite('output.png', cv2.imread('temp_1.png'))
       
-    
+#TODO    
 #def img_processing_SURF(img_path):
-
 
 def mainwindow():
 
