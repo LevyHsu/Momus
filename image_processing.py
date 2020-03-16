@@ -67,9 +67,7 @@ def keypoint_white_black_salt(original_img_path,Salt_and_pepper_Noise_level):
         for i in range(int(Salt_and_pepper_Noise_level)):
             random_y_1 = round(kd_array[q][0][0] + random.uniform(-kd_array[q][1],kd_array[q][1]))
             random_x_1 = round(kd_array[q][0][1] + random.uniform(-kd_array[q][1],kd_array[q][1])) 
-            print(random_y_1)
-            print(random_x_1)
-            print("------------------")
+            
             seed = random.randint(0, 1)
             if(random_x_1 >= width or random_y_1 >= height or random_x_1 <= 0 or random_y_1 <= 0):
                 pass

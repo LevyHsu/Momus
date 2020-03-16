@@ -23,7 +23,6 @@ def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_N
     loop = 0
     
     while counter_current < counter:
-        
         event, values = window.Read(timeout=1)
         if event is None:
             break
@@ -41,7 +40,6 @@ def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_N
             window.Element('-IMAGE-').Update('temp_A.png')
 
         #原图|图片特征值
-        
         if(loop == 1):
             sift = cv2.xfeatures2d.SIFT_create()
             kp1, des1 = sift.detectAndCompute(cv2.imread('temp_1.png'),None)
@@ -51,7 +49,6 @@ def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_N
             window.Element('-IMAGE-').Update('temp_B.png')
           
         #原图|处理后图片匹配
-        
         if(loop == 2):
             kp2, des2 = sift.detectAndCompute(cv2.imread(original_img_path),None)
             bf = cv2.BFMatcher()
