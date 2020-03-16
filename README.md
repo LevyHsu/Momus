@@ -1,5 +1,5 @@
 # Momus
-Momus is a python tool for anti-censorship image processing
+Momus is a cross-platfrom python tool that designed for anti-censorship image processing.
 
 Library:
 ```
