@@ -6,15 +6,13 @@ Library:
 PySimpleGUI
 numpy
 cv2
-time
-image_processing
 matplotlib
-PIL
+pillow
 ```
 
 Install:
 ```bash
-pip install PySimpleGUI numpy cv2 time image_processing matplotlib PIL
+pip install PySimpleGUI numpy opencv-python  matplotlib pillow
 ```
 run:
 ```bash
