@@ -12,5 +12,5 @@ matplotlib
 PIL
 ```
 
-##Demo
+### Demo:
 ![](Momus.gif)
