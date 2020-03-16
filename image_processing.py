@@ -41,8 +41,8 @@ def keypoint_obscure(original_img_path,pixel_number):
         for i in range(int(pixel_number)):
             random_y_1 = round(kd_array[q][0][0] + random.uniform(-kd_array[q][1],kd_array[q][1]))
             random_x_1 = round(kd_array[q][0][1] + random.uniform(-kd_array[q][1],kd_array[q][1]))
-            random_y_2 = random_x_1 + random.randint(0, 3)
-            random_x_2 = random_y_1 + random.randint(0, 3)
+            random_y_2 = random_y_1 + random.randint(0, 3)
+            random_x_2 = random_x_1 + random.randint(0, 3)
             
             if(random_x_1 >= width or random_x_2 >= width or random_y_1 >= height or random_y_2 >= height or random_y_1 <= 0 or random_x_1 <= 0 or random_y_2 <= 0 or random_x_2 <= 0):
                 pass
@@ -62,13 +62,16 @@ def keypoint_white_black_salt(original_img_path,Salt_and_pepper_Noise_level):
     #range: kd_array[q][1]
     width = img.shape[0]
     height = img.shape[1]
-
+   
     for q in range(len(kd_array)):
         for i in range(int(Salt_and_pepper_Noise_level)):
             random_y_1 = round(kd_array[q][0][0] + random.uniform(-kd_array[q][1],kd_array[q][1]))
             random_x_1 = round(kd_array[q][0][1] + random.uniform(-kd_array[q][1],kd_array[q][1])) 
+            print(random_y_1)
+            print(random_x_1)
+            print("------------------")
             seed = random.randint(0, 1)
-            if(random_y_1 >= width or random_x_1 >= height or random_y_1 <= 0 or random_x_1 <= 0):
+            if(random_x_1 >= width or random_y_1 >= height or random_x_1 <= 0 or random_y_1 <= 0):
                 pass
             else:
                 if (seed == 0):

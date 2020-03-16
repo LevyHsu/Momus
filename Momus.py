@@ -16,7 +16,7 @@ def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_N
     sg.theme('DarkAmber')
     layout = [
           [sg.Image('temp.png',key = '-IMAGE-')],
-          [sg.Multiline(default_text='开始图像处理\n', size=(190, 20),key = '-TEXT-',do_not_clear=True)],
+          [sg.Multiline(default_text='开始图像处理\n', size=(100, 20),key = '-TEXT-',do_not_clear=True)],
           ]
     window = sg.Window('Momus 图像反识别工具', layout)
     counter_current = 0
@@ -115,7 +115,7 @@ def mainwindow():
 
 def cleanup(filepath):
     os.remove("temp.png")
-    #os.remove("temp_1.png")
+    os.remove("temp_1.png")
     os.remove("temp_A.png")
     os.remove("temp_B.png")
 
