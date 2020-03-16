@@ -18,6 +18,10 @@ run:
 ```bash
 python3 Momus.py
 ```
+Pack to exe:
+```
+pyinstaller -F -i logo.ico -w Momus.py -p image_processing.py
+```
 Or use release version
 
 ### Demo:
