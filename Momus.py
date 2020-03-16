@@ -12,13 +12,20 @@ from PIL import Image
 def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_Noise_level):
     hmerge = np.hstack((cv2.imread(original_img_path), cv2.imread(original_img_path)))
     cv2.imwrite('temp.png', hmerge)
+
+    #Resize img to proper size
+    image_processing.img_resize_to_GUI('temp.png')
+    img_size = cv2.imread('temp.png')
+    width = img_size.shape[1]
+    height = img_size.shape[0]
+
     cv2.imwrite('temp_1.png', cv2.imread(original_img_path))
     sg.theme('DarkAmber')
     layout = [
-          [sg.Image('temp.png',key = '-IMAGE-')],
-          [sg.Multiline(default_text='开始图像处理\n', size=(100, 20),key = '-TEXT-',do_not_clear=True)],
+                [sg.Multiline(default_text='开始图像处理\n', size=(width, 2),key = '-TEXT-',do_not_clear=True)],
+                [sg.Image('temp.png',key = '-IMAGE-')],
           ]
-    window = sg.Window('Momus 图像反识别工具', layout)
+    window = sg.Window('Momus 图像反识别工具',layout, size=(width+3, height+2))
     counter_current = 0
     loop = 0
     
@@ -37,6 +44,7 @@ def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_N
         if(loop == 0):
             hmerge = np.hstack((cv2.imread(original_img_path), cv2.imread('temp_1.png')))
             cv2.imwrite('temp_A.png', hmerge)
+            image_processing.img_resize_to_GUI('temp_A.png')
             window.Element('-IMAGE-').Update('temp_A.png')
 
         #原图|图片特征值
@@ -46,6 +54,7 @@ def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_N
             img2_B = cv2.drawKeypoints(cv2.imread('temp_1.png'),kp1,cv2.imread('temp_1.png'),color=(255,50,255))
             hmerge2 = np.hstack((cv2.imread(original_img_path), img2_B))
             cv2.imwrite('temp_B.png', hmerge2)
+            image_processing.img_resize_to_GUI('temp_B.png')
             window.Element('-IMAGE-').Update('temp_B.png')
           
         #原图|处理后图片匹配
@@ -59,6 +68,7 @@ def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_N
                     good.append([m])
             imgC = cv2.drawMatchesKnn(cv2.imread(original_img_path),kp2,cv2.imread('temp_1.png'),kp1,matches,None,flags=2)
             cv2.imwrite('temp_C.png', imgC)
+            image_processing.img_resize_to_GUI('temp_C.png')
             window.Element('-IMAGE-').Update('temp_C.png')
 
         window.Element('-TEXT-').Update(value="更新特征值中\n", append=True)
@@ -89,10 +99,12 @@ def mainwindow():
            [sg.Spin(values=('Spin Box 1', '2', '3'), initial_value='Spin Box 3')]]
 
     layout = [
-            [sg.Text('要处理的图片或文件夹:')],
+            [sg.Text('要处理的图片:')],
             [sg.Input(), sg.FileBrowse()], 
-            [sg.Checkbox('反OCR识别', size=(12,1),default=False),  sg.Checkbox('反SIFT匹配识别(BFmatcher)', size=(37,1),default=True)],
-            [sg.Checkbox('水印', size=(12,1),default=False), sg.Checkbox('反SURF匹配识别(FlannBasedMatcher)', size=(37,1),default=False)],
+            [sg.Text(' ')],
+            [sg.Checkbox('反SIFT(Scale-Invariant Feature Transform)匹配识别', size=(45,1),default=True)],
+            [sg.Checkbox('反SURF(Speeded-Up Robust Features)匹配识别(未开放)', size=(45,1),default=False)],
+            [sg.Checkbox('水印(未开放)', size=(12,1),default=False)],
             [sg.Text(' ')],
             [sg.Text('干扰手段:')],
             [sg.Checkbox('近似值处理(Pixel Approximation) 密度:', size=(38,1),default=True)],
@@ -101,7 +113,7 @@ def mainwindow():
             [sg.Slider(range=(1, 20), orientation='h', size=(40, 5), default_value=2)],
             [sg.Text(' ')],
             [sg.Text('迭代次数:')],
-            [sg.Slider(range=(1, 100), orientation='h', size=(40, 5), default_value=20)],
+            [sg.Slider(range=(1, 100), orientation='h', size=(40, 5), default_value=10)],
             [sg.Submit(tooltip='Click to submit this form'), sg.Cancel()],
         ]
 
@@ -115,19 +127,21 @@ def cleanup(filepath):
     os.remove("temp_1.png")
     os.remove("temp_A.png")
     os.remove("temp_B.png")
+    os.remove("temp_C.png")
 
 def main():
     parameter = mainwindow()
     filepath = parameter[0]
-    anti_OCR = parameter[1]
-    anti_SIFT_BFmatcher = parameter[2]
-    anti_SURF_FlannBasedMatcher = parameter[3]
-    watermark = parameter[4]
-    Gaussian_noise = parameter[5]
-    Gaussian_noise_level = parameter[6]
-    Salt_and_pepper_Noise = parameter[7]
-    Salt_and_pepper_Noise_level = parameter[8]
-    counter = parameter[9]
+    
+    anti_SIFT = parameter[1]
+    anti_SURF = parameter[2]
+    watermark = parameter[3]
+    Gaussian_noise = parameter[4]
+    Gaussian_noise_level = parameter[5]
+    Salt_and_pepper_Noise = parameter[6]
+    Salt_and_pepper_Noise_level = parameter[7]
+    counter = parameter[8]
+
     filepath = image_processing.jpg_to_png(filepath)
     if(Gaussian_noise):
         pass
@@ -137,7 +151,8 @@ def main():
         pass
     else:
         Salt_and_pepper_Noise_level = 0
-    img_processing_SIFT(filepath,counter,Gaussian_noise_level,Salt_and_pepper_Noise_level)
+    if anti_SIFT :
+        img_processing_SIFT(filepath,counter,Gaussian_noise_level,Salt_and_pepper_Noise_level)
    
     
     cleanup(filepath);
@@ -152,4 +167,5 @@ https://docs.opencv.org/3.4/d2/d29/classcv_1_1KeyPoint.html
 https://docs.opencv.org/3.4/dc/dc3/tutorial_py_matcher.html
 https://pysimplegui.readthedocs.io/en/latest/
 https://isotope11.com/blog/storing-surf-sift-orb-keypoints-using-opencv-in-python
+https://www.tutorialkart.com/opencv/python/opencv-python-resize-image/
 '''

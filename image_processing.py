@@ -87,3 +87,22 @@ def jpg_to_png(original_img_path):
     im.save(base + ".png")
     
     return base + ".png"
+
+def img_resize_to_GUI(file_path):
+    img = cv2.imread(file_path)
+    width = img.shape[1]
+    height = img.shape[0]
+
+    
+    if (1366/width < 768/height):
+        scale_percent = 1366/width
+    else:
+        scale_percent = 768/height
+    
+    width = int(img.shape[1] * scale_percent)
+    height = int(img.shape[0] * scale_percent)
+    dim = (width, height)
+    # resize image
+    resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
+ 
+    cv2.imwrite(file_path, resized)
