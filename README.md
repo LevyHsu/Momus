@@ -5,7 +5,7 @@
 #### Monus uses SIFT（Scale Invariant Feature Transform） from opencv to detect all keypoint on img then add noise to aviod auto-detection on scial media platform.
 #### Monus使用opencv库中的SIFT（Scale Invariant Feature Transform）算法来标记所有的关键点，然后添加噪音来避免社交平台的自动审查
 
-Library:
+Libraries:
 ```
 PySimpleGUI
 numpy
@@ -16,7 +16,7 @@ pillow
 
 Install:
 ```bash
-pip install PySimpleGUI numpy opencv-python  matplotlib pillow
+pip install -r requirements.txt
 ```
 run:
 ```bash
