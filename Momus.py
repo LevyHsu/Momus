@@ -9,7 +9,7 @@ import image_processing
 from matplotlib import pyplot as plt
 from PIL import Image
 
-def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_Noise_level):
+def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_Noise_level,Random_Scalar_level):
     hmerge = np.hstack((cv2.imread(original_img_path), cv2.imread(original_img_path)))
     cv2.imwrite('temp.png', hmerge)
 
@@ -34,9 +34,11 @@ def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_N
         if event is None:
             break
         if(pixel_number>0):
-            image_processing.keypoint_obscure(original_img_path,pixel_number)
+            image_processing.keypoint_obscure(pixel_number)
         if(Salt_and_pepper_Noise_level>0):
-            image_processing.keypoint_white_black_salt(original_img_path,Salt_and_pepper_Noise_level)
+            image_processing.keypoint_white_black_salt(Salt_and_pepper_Noise_level)
+        if(Random_Scalar_level>0):
+            image_processing.Random_Scalar_Draw(Random_Scalar_level,counter)
         
         window.Element('-TEXT-').Update(value=("----------------------------\n第"+str(counter_current)+"次迭代\n"), append=False)
         
@@ -101,15 +103,17 @@ def mainwindow():
             [sg.Text('要处理的图片:')],
             [sg.Input(), sg.FileBrowse()], 
             [sg.Text(' ')],
-            [sg.Checkbox('反SIFT(Scale-Invariant Feature Transform)匹配识别', size=(45,1),default=True)],
-            [sg.Checkbox('反SURF(Speeded-Up Robust Features)匹配识别(未开放)', size=(45,1),default=False)],
-            [sg.Checkbox('水印(未开放)', size=(12,1),default=False)],
+            [sg.Checkbox('反SIFT (Scale-Invariant Feature Transform) 匹配识别', size=(45,1),default=True)],
+            [sg.Checkbox('反SURF (Speeded-Up Robust Features) 匹配识别 (未开放)', size=(45,1),default=False)],
+            [sg.Checkbox('水印 (未开放)', size=(12,1),default=False)],
             [sg.Text(' ')],
             [sg.Text('干扰手段:')],
             [sg.Checkbox('近似值处理(Pixel Approximation) 密度:', size=(38,1),default=True)],
             [sg.Slider(range=(1, 20), orientation='h', size=(40, 5), default_value=2)],
-            [sg.Checkbox('(推荐)椒盐噪声(Salt-and-pepper Noise) 密度:', size=(38,1),default=True)],
+            [sg.Checkbox('椒盐噪声(Salt-and-pepper Noise) 密度:', size=(38,1),default=True)],
             [sg.Slider(range=(1, 20), orientation='h', size=(40, 5), default_value=2)],
+            [sg.Checkbox('随机线段(Random Scalar) 密度:', size=(38,1),default=True)],
+            [sg.Slider(range=(1, 10), orientation='h', size=(40, 5), default_value=5)],
             [sg.Text(' ')],
             [sg.Text('迭代次数:')],
             [sg.Slider(range=(1, 100), orientation='h', size=(40, 5), default_value=10)],
@@ -139,7 +143,9 @@ def main():
     Gaussian_noise_level = parameter[5]
     Salt_and_pepper_Noise = parameter[6]
     Salt_and_pepper_Noise_level = parameter[7]
-    counter = parameter[8]
+    Random_Scalar = parameter[8]
+    Random_Scalar_level = parameter[9] * 10
+    counter = parameter[10]
 
     filepath = image_processing.jpg_to_png(filepath)
     if(Gaussian_noise):
@@ -150,9 +156,15 @@ def main():
         pass
     else:
         Salt_and_pepper_Noise_level = 0
+    if(Random_Scalar):
+        pass
+    else:
+        Random_Scalar_level = 0
+
     if anti_SIFT :
-        img_processing_SIFT(filepath,counter,Gaussian_noise_level,Salt_and_pepper_Noise_level)
-   
+        img_processing_SIFT(filepath,counter,Gaussian_noise_level,Salt_and_pepper_Noise_level,Random_Scalar_level)
+    
+        
     
     cleanup(filepath);
     

@@ -25,7 +25,7 @@ def unpickle_keypoints(array):
         descriptors.append(temp_descriptor)
     return keypoints, np.array(descriptors)
 
-def keypoint_obscure(original_img_path,pixel_number):
+def keypoint_obscure(pixel_number):
     sift = cv2.xfeatures2d.SIFT_create()
     img = cv2.imread('temp_1.png')
     keypoint, descriptors = sift.detectAndCompute(img,None)
@@ -51,7 +51,7 @@ def keypoint_obscure(original_img_path,pixel_number):
     
     cv2.imwrite('temp_1.png', img)
 
-def keypoint_white_black_salt(original_img_path,Salt_and_pepper_Noise_level):
+def keypoint_white_black_salt(Salt_and_pepper_Noise_level):
     sift = cv2.xfeatures2d.SIFT_create()
     img = cv2.imread('temp_1.png')
     keypoint, descriptors = sift.detectAndCompute(img,None)
@@ -79,6 +79,32 @@ def keypoint_white_black_salt(original_img_path,Salt_and_pepper_Noise_level):
     
     cv2.imwrite('temp_1.png', img)
 
+def Random_Scalar_Draw(Random_Scalar_level,counter):
+    img = cv2.imread('temp_1.png')
+    width = img.shape[1]
+    height = img.shape[0]
+    
+    amount1 = random.randint(0, Random_Scalar_level)/counter
+
+    for i in range(int(amount1)):
+        random_x_1 = random.randint(0,width)
+        random_x_2 = random.randint(0,width)
+        random_y_1 = random.randint(0,height)
+        random_y_2 = random.randint(0,height)
+        colour1 = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
+        cv2.line(img, (random_x_1, random_y_1), (random_x_2, random_y_2), colour1,random.randint(1,5))       
+    
+    amount2 = random.randint(0, Random_Scalar_level)/counter*0.7
+    
+    for i in range(int(amount2)):
+        random_x_3 = random.randint(0,width)
+        random_x_4 = random.randint(0,width)
+        random_y_3 = random.randint(0,height)
+        random_y_4 = random.randint(0,height)
+        colour2 = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
+        cv2.rectangle(img, (random_x_3, random_y_3), (random_x_4, random_y_4), colour2, random.randint(1,5))
+
+    cv2.imwrite('temp_1.png', img)
 
 def jpg_to_png(original_img_path):
 
