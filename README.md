@@ -34,4 +34,5 @@ output.png
 ```
 
 ### Demo:
-![](Momus_Demo.gif)
+![](https://levyhsu.com/wp-content/uploads/2020/03/Momus_Demo-1.gif)
+![](https://levyhsu.com/wp-content/uploads/2020/03/Momus_Demo_2.gif)
