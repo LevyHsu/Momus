@@ -34,5 +34,6 @@ output.png
 ```
 
 ### Demo:
-![](Momus_Demo.gif)
-![](Momus_Demo_2.gif)
+![](Demo/Momus_Demo.gif)
+![](Demo/Momus_Demo_2.gif)
+![](Demo/Merge.jpg)
