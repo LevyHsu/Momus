@@ -26,7 +26,8 @@ Pack to exe:
 ```
 pyinstaller -F -i logo.ico -w Momus.py -p image_processing.py
 ```
-Or use release version
+
+[Or use release version](https://github.com/LevyHsu/Momus/releases)
 
 output file(Under same dir):
 ```
