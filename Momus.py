@@ -4,7 +4,6 @@ import os
 import PySimpleGUI as sg
 import numpy as np
 import cv2
-import time
 import image_processing
 from matplotlib import pyplot as plt
 from PIL import Image
@@ -166,7 +165,7 @@ def main():
     
         
     
-    cleanup(filepath);
+    cleanup(filepath)
     
 if __name__ == "__main__":
     main()
