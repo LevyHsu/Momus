@@ -109,14 +109,14 @@ def mainwindow():
             [sg.Text(' ')],
             [sg.Text('干扰手段:')],
             [sg.Checkbox('近似值处理(Pixel Approximation) 密度:', size=(38,1),default=True)],
-            [sg.Slider(range=(1, 20), orientation='h', size=(40, 5), default_value=2)],
+            [sg.Slider(range=(1, 10), orientation='h', size=(40, 5), default_value=1)],
             [sg.Checkbox('椒盐噪声(Salt-and-pepper Noise) 密度:', size=(38,1),default=True)],
-            [sg.Slider(range=(1, 20), orientation='h', size=(40, 5), default_value=2)],
+            [sg.Slider(range=(1, 10), orientation='h', size=(40, 5), default_value=1)],
             [sg.Checkbox('随机线段(Random Scalar) 密度:', size=(38,1),default=True)],
-            [sg.Slider(range=(1, 10), orientation='h', size=(40, 5), default_value=5)],
+            [sg.Slider(range=(1, 10), orientation='h', size=(40, 5), default_value=3)],
             [sg.Text(' ')],
             [sg.Text('迭代次数:')],
-            [sg.Slider(range=(1, 100), orientation='h', size=(40, 5), default_value=10)],
+            [sg.Slider(range=(1, 50), orientation='h', size=(40, 5), default_value=15)],
             [sg.Submit(tooltip='Click to submit this form'), sg.Cancel()],
         ]
 
