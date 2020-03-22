@@ -94,7 +94,7 @@ def Random_Scalar_Draw(Random_Scalar_level,counter):
         colour1 = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
         cv2.line(img, (random_x_1, random_y_1), (random_x_2, random_y_2), colour1,random.randint(1,5))       
     
-    amount2 = random.randint(0, Random_Scalar_level)/counter*0.7
+    amount2 = random.randint(0, Random_Scalar_level)/counter*0.8
     
     for i in range(int(amount2)):
         random_x_3 = random.randint(0,width)
