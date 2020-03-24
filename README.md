@@ -38,6 +38,7 @@ output file(Under same dir):
 output.png
 ```
 
+[Mac version is currently unavaliable due to compatibility issue between tkinte and MacOS 10.14.6](https://discussions.apple.com/thread/250549297)<br/>
 ### Demo:
 ![](Demo/Momus_Demo.gif)
 ![](Demo/Momus_Demo_2.gif)
