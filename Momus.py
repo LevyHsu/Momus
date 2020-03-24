@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 import os
 import PySimpleGUI as sg
 import numpy as np
@@ -8,7 +9,7 @@ import image_processing
 from matplotlib import pyplot as plt
 from PIL import Image
 
-def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_Noise_level,Random_Scalar_level):
+def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_Noise_level,Random_Scalar_level,Random_Crop_Pixel):
     hmerge = np.hstack((cv2.imread(original_img_path), cv2.imread(original_img_path)))
     cv2.imwrite('temp.png', hmerge)
 
@@ -27,7 +28,7 @@ def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_N
     window = sg.Window('Momus 图像反识别工具',layout, size=(width+3, height+2))
     counter_current = 0
     loop = 0
-    
+
     while counter_current < counter:
         event, values = window.Read(timeout=1)
         if event is None:
@@ -38,7 +39,7 @@ def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_N
             image_processing.keypoint_white_black_salt(Salt_and_pepper_Noise_level)
         if(Random_Scalar_level>0):
             image_processing.Random_Scalar_Draw(Random_Scalar_level,counter)
-        
+
         window.Element('-TEXT-').Update(value=("----------------------------\n第"+str(counter_current)+"次迭代\n"), append=False)
         
         #图片|处理后图片
@@ -78,6 +79,8 @@ def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_N
         if (loop == 3):
             loop = 0
     window.close()
+    if(Random_Crop_Pixel>0):
+            image_processing.Random_Crop(Random_Crop_Pixel)
     sg.Popup('完成')
     cv2.imwrite('output.png', cv2.imread('temp_1.png'))
       
@@ -113,8 +116,10 @@ def mainwindow():
             [sg.Slider(range=(1, 10), orientation='h', size=(40, 5), default_value=1)],
             [sg.Checkbox('随机线段(Random Scalar) 密度:', size=(38,1),default=True)],
             [sg.Slider(range=(1, 10), orientation='h', size=(40, 5), default_value=3)],
+            [sg.Checkbox('随机裁剪(Random Crop) 裁剪像素:', size=(40,1),default=True)],
+            [sg.Slider(range=(1, 30), orientation='h', size=(40, 5), default_value=3)],
             [sg.Text(' ')],
-            [sg.Text('迭代次数:')],
+            [sg.Text('迭代次数: (对于多次无法发送的图片 多迭代小干扰)')],
             [sg.Slider(range=(1, 50), orientation='h', size=(40, 5), default_value=15)],
             [sg.Submit(tooltip='Click to submit this form'), sg.Cancel()],
         ]
@@ -144,7 +149,9 @@ def main():
     Salt_and_pepper_Noise_level = parameter[7]
     Random_Scalar = parameter[8]
     Random_Scalar_level = parameter[9] * 10
-    counter = parameter[10]
+    Random_Crop = parameter[10]
+    Random_Crop_Pixel = parameter[11]
+    counter = parameter[12]
 
     filepath = image_processing.jpg_to_png(filepath)
     if(Gaussian_noise):
@@ -159,12 +166,14 @@ def main():
         pass
     else:
         Random_Scalar_level = 0
+    if(Random_Crop):
+        pass
+    else:
+        Random_Crop_Pixel = 0
 
     if anti_SIFT :
-        img_processing_SIFT(filepath,counter,Gaussian_noise_level,Salt_and_pepper_Noise_level,Random_Scalar_level)
-    
-        
-    
+        img_processing_SIFT(filepath,counter,Gaussian_noise_level,Salt_and_pepper_Noise_level,Random_Scalar_level,Random_Crop_Pixel)
+     
     cleanup(filepath)
     
 if __name__ == "__main__":

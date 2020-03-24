@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import os
 import math
 import random
@@ -14,7 +17,7 @@ def pickle_keypoints(keypoints, descriptors):
         ++i
         temp_array.append(temp)
     return temp_array
-
+'''
 def unpickle_keypoints(array):
     keypoints = []
     descriptors = []
@@ -24,7 +27,7 @@ def unpickle_keypoints(array):
         keypoints.append(temp_feature)
         descriptors.append(temp_descriptor)
     return keypoints, np.array(descriptors)
-
+'''
 def keypoint_obscure(pixel_number):
     sift = cv2.xfeatures2d.SIFT_create()
     img = cv2.imread('temp_1.png')
@@ -105,6 +108,20 @@ def Random_Scalar_Draw(Random_Scalar_level,counter):
         cv2.rectangle(img, (random_x_3, random_y_3), (random_x_4, random_y_4), colour2, random.randint(1,5))
 
     cv2.imwrite('temp_1.png', img)
+
+def Random_Crop(Random_Crop_Pixel):
+    img = cv2.imread('temp_1.png')
+    
+    #print(img.shape)
+    x = int(img.shape[0] - Random_Crop_Pixel)
+    y = int(img.shape[1] - Random_Crop_Pixel)
+    #print(Random_Crop_Pixel)
+    #print(x)
+    #print(y)
+    img_out = img[int(Random_Crop_Pixel):x,int(Random_Crop_Pixel):y]
+    
+    cv2.imwrite('temp_1.png', img_out)
+    
 
 def jpg_to_png(original_img_path):
 
