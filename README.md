@@ -40,8 +40,11 @@ output.png
 Mac version is currently unavailable due to [Issue for tkinte under MacOS 10.14.6](https://discussions.apple.com/thread/250549297)<br/>
 
 ### Demo:
+##### Version: 1.2
 ![](Demo/Momus_Demo.gif)
+##### Version: 1.4
 ![](Demo/Momus_Demo_2.gif)
+##### Counter OCR
 ![](Demo/Merge2.jpg)
 ![](Demo/Merge.jpg)
 
