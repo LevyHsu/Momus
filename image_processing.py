@@ -4,6 +4,7 @@
 import os
 import math
 import random
+import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 from PIL import Image
@@ -17,118 +18,6 @@ def pickle_keypoints(keypoints, descriptors):
         ++i
         temp_array.append(temp)
     return temp_array
-'''
-def unpickle_keypoints(array):
-    keypoints = []
-    descriptors = []
-    for point in array:
-        temp_feature = cv2.KeyPoint(x=point[0][0],y=point[0][1],_size=point[1], _angle=point[2], _response=point[3], _octave=point[4], _class_id=point[5])
-        temp_descriptor = point[6]
-        keypoints.append(temp_feature)
-        descriptors.append(temp_descriptor)
-    return keypoints, np.array(descriptors)
-'''
-def keypoint_obscure(pixel_number):
-    sift = cv2.xfeatures2d.SIFT_create()
-    img = cv2.imread('temp_1.png')
-    keypoint, descriptors = sift.detectAndCompute(img,None)
-    kd_array = pickle_keypoints(keypoint, descriptors)
-
-    # x: kd_array[q][0][0]
-    # y: kd_array[q][0][1]
-    #range: kd_array[q][1]
-    width = img.shape[0]
-    height = img.shape[1]
-
-    for q in range(len(kd_array)):
-        for i in range(int(pixel_number)):
-            random_y_1 = round(kd_array[q][0][0] + random.uniform(-kd_array[q][1],kd_array[q][1]))
-            random_x_1 = round(kd_array[q][0][1] + random.uniform(-kd_array[q][1],kd_array[q][1]))
-            random_y_2 = random_y_1 + random.randint(-3, 3)
-            random_x_2 = random_x_1 + random.randint(-3, 3)
-            
-            if(random_x_1 >= width or random_x_2 >= width or random_y_1 >= height or random_y_2 >= height or random_y_1 <= 0 or random_x_1 <= 0 or random_y_2 <= 0 or random_x_2 <= 0):
-                pass
-            else:
-                img[random_x_1,random_y_1] = img[random_x_2,random_y_2]
-    
-    cv2.imwrite('temp_1.png', img)
-
-def keypoint_white_black_salt(Salt_and_pepper_Noise_level):
-    sift = cv2.xfeatures2d.SIFT_create()
-    img = cv2.imread('temp_1.png')
-    keypoint, descriptors = sift.detectAndCompute(img,None)
-    kd_array = pickle_keypoints(keypoint, descriptors)
-
-    # x: kd_array[q][0][0]
-    # y: kd_array[q][0][1]
-    #range: kd_array[q][1]
-    width = img.shape[0]
-    height = img.shape[1]
-   
-    for q in range(len(kd_array)):
-        for i in range(int(Salt_and_pepper_Noise_level)):
-            random_y_1 = round(kd_array[q][0][0] + random.uniform(-kd_array[q][1],kd_array[q][1]))
-            random_x_1 = round(kd_array[q][0][1] + random.uniform(-kd_array[q][1],kd_array[q][1])) 
-            
-            seed = random.randint(0, 1)
-            if(random_x_1 >= width or random_y_1 >= height or random_x_1 <= 0 or random_y_1 <= 0):
-                pass
-            else:
-                if (seed == 0):
-                    img[random_x_1,random_y_1] = [255,255,255]
-                else:
-                    img[random_x_1,random_y_1] = [0,0,0]
-    
-    cv2.imwrite('temp_1.png', img)
-
-def Random_Scalar_Draw(Random_Scalar_level,counter):
-    img = cv2.imread('temp_1.png')
-    width = img.shape[1]
-    height = img.shape[0]
-    
-    amount1 = random.randint(0, Random_Scalar_level)/counter
-
-    for i in range(int(amount1)):
-        random_x_1 = random.randint(0,width)
-        random_x_2 = random.randint(0,width)
-        random_y_1 = random.randint(0,height)
-        random_y_2 = random.randint(0,height)
-        colour1 = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
-        cv2.line(img, (random_x_1, random_y_1), (random_x_2, random_y_2), colour1,random.randint(1,5))       
-    
-    amount2 = random.randint(0, Random_Scalar_level)/counter*0.8
-    
-    for i in range(int(amount2)):
-        random_x_3 = random.randint(0,width)
-        random_x_4 = random.randint(0,width)
-        random_y_3 = random.randint(0,height)
-        random_y_4 = random.randint(0,height)
-        colour2 = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
-        cv2.rectangle(img, (random_x_3, random_y_3), (random_x_4, random_y_4), colour2, random.randint(1,5))
-
-    cv2.imwrite('temp_1.png', img)
-
-def Random_Crop(Random_Crop_Pixel):
-    img = cv2.imread('temp_1.png')
-    
-    #print(img.shape)
-    x = int(img.shape[0] - Random_Crop_Pixel)
-    y = int(img.shape[1] - Random_Crop_Pixel)
-    #print(Random_Crop_Pixel)
-    #print(x)
-    #print(y)
-    img_out = img[int(Random_Crop_Pixel):x,int(Random_Crop_Pixel):y]
-    
-    cv2.imwrite('temp_1.png', img_out)
-    
-
-def jpg_to_png(original_img_path):
-
-    base = os.path.splitext(original_img_path)[0]
-    im = Image.open(original_img_path)
-    im.save(base + ".png")
-    return base + ".png"
 
 def img_resize_to_GUI(file_path):
     img = cv2.imread(file_path)
@@ -146,3 +35,143 @@ def img_resize_to_GUI(file_path):
     # resize image
     resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
     cv2.imwrite(file_path, resized)
+    return resized.shape
+
+class image:
+    img = ''
+    width = 0
+    height = 0
+
+    def __init__(self,path):
+        self.img = cv2.imread(path)
+        self.width = self.img.shape[0]
+        self.height = self.img.shape[1]
+
+class usr_img(image):
+    _img_path = ''
+    _not_png = False
+
+    def __init__(self,path):
+        if (os.path.splitext(path)[1] != ".png"):
+            base = os.path.splitext(path)[0]
+            im = Image.open(path)
+            im.save(base + ".png")
+            self.img_path = base + ".png"
+            self.not_png = True
+        else:
+            self.img_path = path
+
+        self.img = cv2.imread(self.img_path)
+        self.width = self.img.shape[0]
+        self.height = self.img.shape[1]
+        hmerge = np.hstack((cv2.imread(self.img_path), cv2.imread(self.img_path)))
+        cv2.imwrite('demo.png', hmerge)
+    
+    def output(self):
+        if (self.not_png):
+            os.remove(self.img_path)
+        cv2.imwrite(os.path.splitext(self.img_path)[0] + "_output.png", self.img)
+        os.remove("demo.png")
+        
+    
+    def keypoint_obscure(self,pixel_number):
+        sift = cv2.xfeatures2d.SIFT_create()
+        keypoint, descriptors = sift.detectAndCompute(self.img,None)
+        kd_array = pickle_keypoints(keypoint, descriptors)
+
+        # x: kd_array[q][0][0]
+        # y: kd_array[q][0][1]
+        #range: kd_array[q][1]
+
+        for q in range(len(kd_array)):
+            for i in range(int(pixel_number)):
+                random_y_1 = round(kd_array[q][0][0] + random.uniform(-kd_array[q][1],kd_array[q][1]))
+                random_x_1 = round(kd_array[q][0][1] + random.uniform(-kd_array[q][1],kd_array[q][1]))
+                random_y_2 = random_y_1 + random.randint(-3, 3)
+                random_x_2 = random_x_1 + random.randint(-3, 3)
+            
+                if(random_x_1 >= self.width or random_x_2 >= self.width or random_y_1 >= self.height or random_y_2 >= self.height or random_y_1 <= 0 or random_x_1 <= 0 or random_y_2 <= 0 or random_x_2 <= 0):
+                    pass
+                else:
+                    self.img[random_x_1,random_y_1] = self.img[random_x_2,random_y_2]
+    
+    def keypoint_white_black_salt(self,Salt_and_pepper_Noise_level):
+        sift = cv2.xfeatures2d.SIFT_create()
+        keypoint, descriptors = sift.detectAndCompute(self.img,None)
+        kd_array = pickle_keypoints(keypoint, descriptors)
+
+        # x: kd_array[q][0][0]
+        # y: kd_array[q][0][1]
+        #range: kd_array[q][1]
+   
+        for q in range(len(kd_array)):
+            for i in range(int(Salt_and_pepper_Noise_level)):
+                random_y_1 = round(kd_array[q][0][0] + random.uniform(-kd_array[q][1],kd_array[q][1]))
+                random_x_1 = round(kd_array[q][0][1] + random.uniform(-kd_array[q][1],kd_array[q][1])) 
+            
+                seed = random.randint(0, 1)
+                if(random_x_1 >= self.width or random_y_1 >= self.height or random_x_1 <= 0 or random_y_1 <= 0):
+                    pass
+                else:
+                    if (seed == 0):
+                        self.img[random_x_1,random_y_1] = [255,255,255]
+                    else:
+                        self.img[random_x_1,random_y_1] = [0,0,0]
+
+    def Random_Scalar_Draw(self,Random_Scalar_level,counter):
+
+        amount1 = random.randint(0, Random_Scalar_level)/counter
+
+        for i in range(int(amount1)):
+            random_x_1 = random.randint(0,self.width)
+            random_x_2 = random.randint(0,self.width)
+            random_y_1 = random.randint(0,self.height)
+            random_y_2 = random.randint(0,self.height)
+            colour1 = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
+            self.img = cv2.line(self.img, (random_x_1, random_y_1), (random_x_2, random_y_2), colour1,random.randint(1,5))       
+    
+        amount2 = random.randint(0, Random_Scalar_level)/counter*0.8
+    
+        for i in range(int(amount2)):
+            random_x_3 = random.randint(0,self.width)
+            random_x_4 = random.randint(0,self.width)
+            random_y_3 = random.randint(0,self.height)
+            random_y_4 = random.randint(0,self.height)
+            colour2 = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
+            self.img = cv2.rectangle(self.img, (random_x_3, random_y_3), (random_x_4, random_y_4), colour2, random.randint(1,5))
+
+    def Random_Crop(self,Random_Crop_Pixel):
+        x = int(self.width - Random_Crop_Pixel)
+        y = int(self.height - Random_Crop_Pixel)
+        self.img = self.img[int(Random_Crop_Pixel):x,int(Random_Crop_Pixel):y]
+    
+    
+    def show_demo_1(self):
+        hmerge = np.hstack((cv2.imread(self.img_path), self.img))
+        cv2.imwrite('demo.png', hmerge)
+        return img_resize_to_GUI('demo.png')
+    
+    def show_demo_2(self):
+        img2_B = cv2.imread(self.img_path)
+        sift = cv2.xfeatures2d.SIFT_create()
+        kp1, des1 = sift.detectAndCompute(self.img,None)
+        cv2.drawKeypoints(self.img,kp1,img2_B,color=(255,50,255))
+        hmerge = np.hstack((cv2.imread(self.img_path), img2_B))
+        cv2.imwrite('demo.png', hmerge)
+        img_resize_to_GUI('demo.png')
+
+    def show_demo_3(self):
+        sift = cv2.xfeatures2d.SIFT_create()
+        kp1, des1 = sift.detectAndCompute(cv2.imread(self.img_path),None)
+        kp2, des2 = sift.detectAndCompute(self.img,None)
+        bf = cv2.BFMatcher()
+        matches = bf.knnMatch(des1,des2, k=2)
+        good = []
+        for m,n in matches:
+            if m.distance < 0.3*n.distance:
+                good.append([m])
+        imgC = cv2.drawMatchesKnn(cv2.imread(self.img_path),kp1,self.img,kp2,good[:10000],None,flags=2)
+        cv2.imwrite('demo.png', imgC)
+        img_resize_to_GUI('demo.png')
+        
+        
