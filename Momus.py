@@ -12,8 +12,9 @@ from PIL import Image
 def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_Noise_level,Random_Scalar_level,Random_Crop_Pixel):
     user_image = image_processing.usr_img(original_img_path)
     
-    window_width = user_image.show_demo_1()[1]
-    window_height = user_image.show_demo_1()[0]
+    shape = user_image.show_demo_1()
+    window_width = shape[1]
+    window_height = shape[0]
 
     sg.theme('DarkAmber')
     layout = [
@@ -59,24 +60,10 @@ def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_N
             user_image.Random_Crop(Random_Crop_Pixel)
     user_image.output()
     sg.Popup('完成')
-          
-#TODO    
-#def img_processing_SURF(img_path):
 
 def mainwindow():
 
     sg.theme('DarkAmber')
-    # ------ Menu Definition ------ #
-    menu_def = [['&File', ['&Open', '&Save', 'E&xit', 'Properties']],
-            ['&Edit', ['Paste', ['Special', 'Normal', ], 'Undo'], ],
-            ['&Help', '&About...'], ]
-
-# ------ Column Definition ------ #
-    column1 = [[sg.Text('Column 1', background_color='lightblue', justification='center', size=(10, 1))],
-           [sg.Spin(values=('Spin Box 1', '2', '3'), initial_value='Spin Box 1')],
-           [sg.Spin(values=('Spin Box 1', '2', '3'), initial_value='Spin Box 2')],
-           [sg.Spin(values=('Spin Box 1', '2', '3'), initial_value='Spin Box 3')]]
-
     layout = [
             [sg.Text('要处理的图片:')],
             [sg.Input(), sg.FileBrowse()], 
