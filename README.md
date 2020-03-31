@@ -39,7 +39,7 @@ output.png
 ```
 
 TODO LIST:
-1. Switch from OPP to OOP
+1. OPP to OOP
 2. Remove all unnecessary file r/w
 3. Performance increase
 4. Realse Mac version, it is currently unavailable due to [compatibility issue for tkinte under MacOS 10.14.6](https://discussions.apple.com/thread/250549297)<br/>
