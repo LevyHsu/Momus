@@ -38,7 +38,12 @@ output file(Under same dir):
 output.png
 ```
 
-Mac version is currently unavailable due to [compatibility issue between tkinte and MacOS 10.14.6](https://discussions.apple.com/thread/250549297)<br/>
+TODO LIST:
+1. Switch from OPP to OOP
+2. Remove all unnecessary file r/w
+3. Performance increase
+4. Realse Mac version, it is currently unavailable due to [compatibility issue for tkinte under MacOS 10.14.6](https://discussions.apple.com/thread/250549297)<br/>
+
 ### Demo:
 ![](Demo/Momus_Demo.gif)
 ![](Demo/Momus_Demo_2.gif)
