@@ -48,9 +48,10 @@ class image:
         self.height = self.img.shape[1]
 
 class usr_img(image):
-    _img_path = ''
-    _not_png = False
 
+    not_png = False
+    _img_path = ''
+    
     def __init__(self,path):
         if (os.path.splitext(path)[1] != ".png"):
             base = os.path.splitext(path)[0]
@@ -171,6 +172,7 @@ class usr_img(image):
             if m.distance < 0.3*n.distance:
                 good.append([m])
         imgC = cv2.drawMatchesKnn(cv2.imread(self.img_path),kp1,self.img,kp2,good[:10000],None,flags=2)
+        print("Pair of matches: " + str(len(good)))
         cv2.imwrite('demo.png', imgC)
         img_resize_to_GUI('demo.png')
         

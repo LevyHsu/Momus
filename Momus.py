@@ -19,9 +19,11 @@ def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_N
     sg.theme('DarkAmber')
     layout = [
                 [sg.Multiline(default_text='开始图像处理\n', size=(window_width, 2),key = '-TEXT-',do_not_clear=True)],
+                [sg.ProgressBar(100, orientation='h', size=(window_width, 20), key='progressbar')],
                 [sg.Image('demo.png',key = '-IMAGE-')],
           ]
-    window = sg.Window('Momus 图像反识别工具',layout, size=(window_width + 2, window_height + 4))
+    window = sg.Window('Momus 图像反识别工具',layout, size=(window_width + 2, window_height + 30))
+    progress_bar = window['progressbar']
     counter_current = 0
 
     while counter_current < counter:
@@ -34,7 +36,7 @@ def img_processing_SIFT(original_img_path,counter,pixel_number,Salt_and_pepper_N
             user_image.keypoint_white_black_salt(Salt_and_pepper_Noise_level)
         if(Random_Scalar_level>0):
             user_image.Random_Scalar_Draw(Random_Scalar_level,counter)
-
+        progress_bar.UpdateBar(counter_current/counter*100)
         window.Element('-TEXT-').Update(value=("----------------------------\n第"+str(counter_current)+"次迭代\n"), append=False)
         
         if(counter_current % 3 == 0):
@@ -141,4 +143,5 @@ https://isotope11.com/blog/storing-surf-sift-orb-keypoints-using-opencv-in-pytho
 https://www.tutorialkart.com/opencv/python/opencv-python-resize-image/
 https://docs.opencv.org/master/d4/d5d/group__features2d__draw.html
 https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_feature2d/py_matcher/py_matcher.html
+https://github.com/PySimpleGUI/PySimpleGUI/blob/master/DemoPrograms/Demo_OpenCV.py
 '''
