@@ -48,7 +48,7 @@ class image:
         self.height = self.img.shape[1]
 
 class usr_img(image):
-
+    output_name = ''
     not_png = False
     _img_path = ''
     
@@ -71,7 +71,8 @@ class usr_img(image):
     def output(self):
         if (self.not_png):
             os.remove(self.img_path)
-        cv2.imwrite(os.path.splitext(self.img_path)[0] + "_output.png", self.img)
+        self.output_name = os.path.splitext(self.img_path)[0] + "_output.png"
+        cv2.imwrite(self.output_name, self.img)
         os.remove("demo.png")
         
     
@@ -169,11 +170,13 @@ class usr_img(image):
         matches = bf.knnMatch(des1,des2, k=2)
         good = []
         for m,n in matches:
-            if m.distance < 0.3*n.distance:
+            if m.distance < 0.8*n.distance:
                 good.append([m])
         imgC = cv2.drawMatchesKnn(cv2.imread(self.img_path),kp1,self.img,kp2,good[:10000],None,flags=2)
         #print("Pair of matches: " + str(len(good)))
         cv2.imwrite('demo.png', imgC)
         img_resize_to_GUI('demo.png')
+        
+        return len(good)
         
         
