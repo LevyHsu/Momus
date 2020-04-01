@@ -49,7 +49,7 @@ class image:
 
 class usr_img(image):
     output_name = ''
-    not_png = False
+    _not_png = False
     _img_path = ''
     
     def __init__(self,path):
@@ -120,9 +120,9 @@ class usr_img(image):
                     else:
                         self.img[random_x_1,random_y_1] = [0,0,0]
 
-    def Random_Scalar_Draw(self,Random_Scalar_level,counter):
+    def Random_Shape_Draw(self,Random_Shape_level,counter):
 
-        amount1 = random.randint(0, Random_Scalar_level)/counter
+        amount1 = random.randint(0, Random_Shape_level)/counter
 
         for i in range(int(amount1)):
             random_x_1 = random.randint(0,self.width)
@@ -132,7 +132,7 @@ class usr_img(image):
             colour1 = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
             self.img = cv2.line(self.img, (random_x_1, random_y_1), (random_x_2, random_y_2), colour1,random.randint(1,5))       
     
-        amount2 = random.randint(0, Random_Scalar_level)/counter*0.8
+        amount2 = random.randint(0, Random_Shape_level)/counter*0.8
     
         for i in range(int(amount2)):
             random_x_3 = random.randint(0,self.width)
@@ -143,8 +143,8 @@ class usr_img(image):
             self.img = cv2.rectangle(self.img, (random_x_3, random_y_3), (random_x_4, random_y_4), colour2, random.randint(1,5))
 
     def Random_Crop(self,Random_Crop_Pixel):
-        x = int(self.width - Random_Crop_Pixel)
-        y = int(self.height - Random_Crop_Pixel)
+        x = int(self.width - random.randint(5,Random_Crop_Pixel))
+        y = int(self.height - random.randint(5,Random_Crop_Pixel))
         self.img = self.img[int(Random_Crop_Pixel):x,int(Random_Crop_Pixel):y]
     
     

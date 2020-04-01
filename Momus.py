@@ -10,14 +10,14 @@ import image_processing
 from matplotlib import pyplot as plt
 from PIL import Image
 
-def img_processing_SIFT(mode,auto_target_similarity,original_img_path,counter,pixel_number,Salt_and_pepper_Noise_level,Random_Scalar_level,Random_Crop_Pixel):
+def img_processing_SIFT(mode,auto_target_similarity,original_img_path,counter,pixel_number,Salt_and_pepper_Noise_level,Random_Shape_level,Random_Crop_Pixel):
     user_image = image_processing.usr_img(original_img_path)
     
     shape = user_image.show_demo_1()
     window_width = shape[1]
     window_height = shape[0]
 
-    original_matches = user_image.show_demo_3()
+    original_matches = user_image.show_demo_3()/3
     #print("original_matches: "+ str(original_matches))
     match_proportion = 100
 
@@ -42,8 +42,8 @@ def img_processing_SIFT(mode,auto_target_similarity,original_img_path,counter,pi
                 user_image.keypoint_obscure(pixel_number)
             if(Salt_and_pepper_Noise_level>0):
                 user_image.keypoint_white_black_salt(Salt_and_pepper_Noise_level)
-            if(Random_Scalar_level>0):
-                user_image.Random_Scalar_Draw(Random_Scalar_level,counter)
+            if(Random_Shape_level>0):
+                user_image.Random_Shape_Draw(Random_Shape_level,counter)
 
             progress_bar.UpdateBar(counter_current/counter*100)
             window.Element('-TEXT-').Update(value=("第"+str(counter_current)+"次迭代\n 匹配度: " + "%5.3f" % (match_proportion) + "%\n"), append=True)
@@ -71,8 +71,12 @@ def img_processing_SIFT(mode,auto_target_similarity,original_img_path,counter,pi
             event, values = window.Read(timeout=1)
             if event is None:
                 break
+            
             user_image.keypoint_obscure(1)
-            user_image.keypoint_white_black_salt(1)
+            if (auto_target_similarity < 70):
+                user_image.keypoint_white_black_salt(1)
+            if (auto_target_similarity < 25):
+                user_image.Random_Shape_Draw(20,15)
 
             window.Element('-TEXT-').Update(value=("第"+str(counter_current)+"次迭代\n 匹配度: " + "%5.3f" % (match_proportion) + "%\n"), append=True)
         
@@ -93,12 +97,13 @@ def img_processing_SIFT(mode,auto_target_similarity,original_img_path,counter,pi
                 window.Element('-TEXT-').Update(value="KNN匹配\n", append=True)
             
             counter_current += 1
+
     window.close()
 
     if(Random_Crop_Pixel>0 and mode == 0):
             user_image.Random_Crop(Random_Crop_Pixel)
     if(mode == 1):
-            user_image.Random_Crop(random.randint(2,5))
+            user_image.Random_Crop(random.randint(10,20))
     user_image.output()
     sg.Popup('完成 文件：'+ user_image.output_name)
 
@@ -127,10 +132,10 @@ def mainwindow():
                     [sg.Slider(range=(1, 10), orientation='h', size=(40, 5), default_value=1)],
                     [sg.Checkbox('椒盐噪声(Salt-and-pepper Noise) 密度:', size=(38,1),default=True)],
                     [sg.Slider(range=(1, 10), orientation='h', size=(40, 5), default_value=1)],
-                    [sg.Checkbox('随机线段(Random Scalar) 密度:', size=(38,1),default=True)],
+                    [sg.Checkbox('随机线段(Random Shape) 密度:', size=(38,1),default=True)],
                     [sg.Slider(range=(1, 10), orientation='h', size=(40, 5), default_value=1)],
                     [sg.Checkbox('随机裁剪(Random Crop) 裁剪像素:', size=(40,1),default=True)],
-                    [sg.Slider(range=(1, 30), orientation='h', size=(40, 5), default_value=3)],
+                    [sg.Slider(range=(5, 50), orientation='h', size=(40, 5), default_value=10)],
                     [sg.Text(' ')],
                     [sg.Text('迭代次数: (对于多次无法发送的图片 多迭代小干扰)')],
                     [sg.Slider(range=(1, 50), orientation='h', size=(40, 5), default_value=5)],
@@ -163,8 +168,8 @@ def main():
     Gaussian_noise_level = parameter[0][5]
     Salt_and_pepper_Noise = parameter[0][6]
     Salt_and_pepper_Noise_level = parameter[0][7]
-    Random_Scalar = parameter[0][8]
-    Random_Scalar_level = parameter[0][9] * 8
+    Random_Shape = parameter[0][8]
+    Random_Shape_level = parameter[0][9] * 8
     Random_Crop = parameter[0][10]
     Random_Crop_Pixel = parameter[0][11]
     counter = parameter[0][12]
@@ -175,8 +180,8 @@ def main():
     if(Salt_and_pepper_Noise== False):
         Salt_and_pepper_Noise_level = 0
     
-    if(Random_Scalar== False):
-        Random_Scalar_level = 0
+    if(Random_Shape== False):
+        Random_Shape_level = 0
 
     if(Random_Crop== False):
         Random_Crop_Pixel = 0
@@ -187,7 +192,7 @@ def main():
         mode = 1
 
     if anti_SIFT :
-        img_processing_SIFT(mode,auto_target_similarity,filepath,counter,Gaussian_noise_level,Salt_and_pepper_Noise_level,Random_Scalar_level,Random_Crop_Pixel)
+        img_processing_SIFT(mode,auto_target_similarity,filepath,counter,Gaussian_noise_level,Salt_and_pepper_Noise_level,Random_Shape_level,Random_Crop_Pixel)
      
     
 if __name__ == "__main__":
