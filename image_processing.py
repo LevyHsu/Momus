@@ -49,7 +49,7 @@ class image:
 
 class usr_img(image):
     output_name = ''
-    _not_png = False
+    not_png = False
     _img_path = ''
     
     def __init__(self,path):
