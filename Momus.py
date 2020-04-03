@@ -27,7 +27,7 @@ def img_processing_SIFT(mode,auto_target_similarity,original_img_path,counter,pi
                 [sg.ProgressBar(100, orientation='h', size=(window_width, 20), key='progressbar')],
                 [sg.Image('demo.png',key = '-IMAGE-')],
           ]
-    window = sg.Window('Momus 图像反识别工具',layout,icon='logo.ico',no_titlebar=True, size=(window_width + 2, window_height + 30))
+    window = sg.Window('Momus 图像反识别工具',layout,no_titlebar=True, size=(window_width + 2, window_height + 30))
     progress_bar = window['progressbar']
     counter_current = 0
     
@@ -152,7 +152,7 @@ def mainwindow():
         ]
     
 
-    window = sg.Window('Momus 图像反识别工具', layout,icon='logo.ico', no_titlebar=True,size=(430,580))
+    window = sg.Window('Momus 图像反识别工具', layout, no_titlebar=True,size=(430,580))
     event, values = window.read()
     window.close()
     return values,event
