@@ -27,7 +27,7 @@ def img_processing_SIFT(mode,auto_target_similarity,original_img_path,counter,pi
                 [sg.ProgressBar(100, orientation='h', size=(window_width, 20), key='progressbar')],
                 [sg.Image('demo.png',key = '-IMAGE-')],
           ]
-    window = sg.Window('Momus 图像反识别工具',layout, size=(window_width + 2, window_height + 30))
+    window = sg.Window('Momus 图像反识别工具',layout,icon='logo.ico',no_titlebar=True, size=(window_width + 2, window_height + 30))
     progress_bar = window['progressbar']
     counter_current = 0
     
@@ -105,7 +105,7 @@ def img_processing_SIFT(mode,auto_target_similarity,original_img_path,counter,pi
     if(mode == 1):
             user_image.Random_Crop(random.randint(10,20))
     user_image.output()
-    sg.Popup('完成 文件：'+ user_image.output_name)
+    sg.SystemTray.notify('处理完成 ', '文件：'+ user_image.output_name)
 
 def mainwindow():
 
@@ -152,15 +152,20 @@ def mainwindow():
         ]
     
 
-    window = sg.Window('Momus 图像反识别工具', layout,size=(430,600))
+    window = sg.Window('Momus 图像反识别工具', layout,icon='logo.ico', no_titlebar=True,size=(430,580))
     event, values = window.read()
     window.close()
     return values,event
 
 def main():
     parameter = mainwindow()
+    if(parameter[1] == "Submit0"):
+        mode = 0
+    elif(parameter[1] == "Submit"):
+        mode = 1
+    else:
+        exit(0)
     filepath = parameter[0][0]
-    
     anti_SIFT = parameter[0][1]
     watermark = parameter[0][2]
     auto_target_similarity = parameter[0][3]
@@ -185,11 +190,6 @@ def main():
 
     if(Random_Crop== False):
         Random_Crop_Pixel = 0
-
-    if(parameter[1] == "Submit0"):
-        mode = 0
-    elif(parameter[1] == "Submit"):
-        mode = 1
 
     if anti_SIFT :
         img_processing_SIFT(mode,auto_target_similarity,filepath,counter,Gaussian_noise_level,Salt_and_pepper_Noise_level,Random_Shape_level,Random_Crop_Pixel)
