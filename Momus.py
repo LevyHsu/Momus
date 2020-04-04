@@ -21,7 +21,7 @@ def img_processing_SIFT(mode,auto_target_similarity,original_img_path,counter,pi
     #print("original_matches: "+ str(original_matches))
     match_proportion = 100
 
-    sg.theme('DarkAmber')
+    sg.theme('DarkBlue')
     layout = [
                 [sg.Multiline(default_text='开始图像处理\n', size=(window_width, 2),key = '-TEXT-',do_not_clear=False)],
                 [sg.ProgressBar(100, orientation='h', size=(window_width, 20), key='progressbar')],
@@ -92,6 +92,7 @@ def img_processing_SIFT(mode,auto_target_similarity,original_img_path,counter,pi
           
             if(counter_current % 3 == 2):
                 match_proportion = user_image.show_demo_3()/original_matches *100
+                #progress_bar.UpdateBar( 50/(match_proportion - auto_target_similarity))
                 #print("match_proportion: "+ str(match_proportion))
                 window.Element('-IMAGE-').Update('demo.png')
                 window.Element('-TEXT-').Update(value="KNN匹配\n", append=True)
