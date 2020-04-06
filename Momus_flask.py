@@ -10,7 +10,6 @@ import image_processing
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = './templates/usr_temp_files'
-#ALLOWED_EXTENSIONS = {'jpg', 'png', 'gif','bmp'}
 #MAX_CONTENT_LENGTH = 32 * 2048 * 2048
 app = Flask(__name__,
     template_folder='./templates',  
@@ -20,10 +19,6 @@ app = Flask(__name__,
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #app.config['ALLOWED_EXTENSIONS'] = ALLOWED_EXTENSIONS
 #app.config['MAX_CONTENT_LENGTH'] = MAX_CONTENT_LENGTH
-
-standby_list = []
-ongoing_list = []
-finished_list = []
 
 def generate_key(stringLength=8):
     """Generate a random string of letters and digits """
@@ -42,7 +37,6 @@ def index():
 
 @app.route('/uploads', methods = ['POST'])
 def upload_img():
-    print(request)
     this_sessionkey = generate_key(8)
     file = request.files["file"]
     filename = secure_filename(file.filename)
@@ -86,8 +80,6 @@ def pack_to_queue():
 def download_file():
     output_name = request.args['output_name']  
     output_name = session['output_name']
-    print("！")
-    print(output_name)
     return render_template("downloads.html",user_image=json.loads(output_name))
 
 def momus_img_processing(level,path):
@@ -108,13 +100,11 @@ def momus_img_processing(level,path):
             user_image.Random_Shape_Draw(40,25)
     user_image.Random_Crop(random.randint(5,10))
     output_name = user_image.output_flask()
-    print("FUCK!!!")
-    print(output_name)
     return output_name
 
 if __name__ == '__main__':
     app.secret_key = generate_key(20)
-    app.run(debug = True)
+    app.run(debug = False)
 '''
 Reference:
 https://link.springer.com/content/pdf/10.1186/1687-417X-2013-8.pdf
