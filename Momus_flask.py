@@ -91,16 +91,18 @@ def download_file():
     return render_template("downloads.html",user_image=json.loads(output_name))
 
 def momus_img_processing(level,path):
-    user_image = image_processing.usr_img(path)
+    #0 for online mode
+    user_image = image_processing.usr_img(path,0)
     if (level == "high"):
         for i in range(10):
             user_image.keypoint_obscure(1)
     if (level == "mid"):
-        for i in range(20):
+        for i in range(15):
             user_image.keypoint_obscure(1)
             user_image.keypoint_white_black_salt(1)
+            user_image.Random_Shape_Draw(20,15)
     if (level == "low"):
-        for i in range(25):
+        for i in range(20):
             user_image.keypoint_obscure(1)
             user_image.keypoint_white_black_salt(1)
             user_image.Random_Shape_Draw(40,25)

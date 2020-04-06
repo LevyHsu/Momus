@@ -52,7 +52,7 @@ class usr_img(image):
     not_png = False
     _img_path = ''
     
-    def __init__(self,path):
+    def __init__(self,path,offline):
         if (os.path.splitext(path)[1] != ".png"):
             base = os.path.splitext(path)[0]
             im = Image.open(path)
@@ -65,8 +65,9 @@ class usr_img(image):
         self.img = cv2.imread(self.img_path)
         self.width = self.img.shape[0]
         self.height = self.img.shape[1]
-        hmerge = np.hstack((cv2.imread(self.img_path), cv2.imread(self.img_path)))
-        cv2.imwrite('demo.png', hmerge)
+        if(offline):
+            hmerge = np.hstack((cv2.imread(self.img_path), cv2.imread(self.img_path)))
+            cv2.imwrite('demo.png', hmerge)
     
     def output(self):
         if (self.not_png):
@@ -80,7 +81,11 @@ class usr_img(image):
             os.remove(self.img_path)
         self.output_name = os.path.splitext(self.img_path)[0] + "_output.png"
         cv2.imwrite(self.output_name, self.img)
-        return self.output_name
+        im1 = Image.open(self.output_name)
+        jpg_name = os.path.splitext(self.img_path)[0] + "_output.jpg"
+        im1.save(jpg_name)
+        os.remove(self.output_name)
+        return jpg_name
 
     def keypoint_obscure(self,pixel_number):
         sift = cv2.xfeatures2d.SIFT_create()

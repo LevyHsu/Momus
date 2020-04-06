@@ -10,7 +10,8 @@ from matplotlib import pyplot as plt
 from PIL import Image
 
 def img_processing_SIFT(mode,auto_target_similarity,original_img_path,counter,pixel_number,Salt_and_pepper_Noise_level,Random_Shape_level,Random_Crop_Pixel):
-    user_image = image_processing.usr_img(original_img_path)
+    #1 for offline mode
+    user_image = image_processing.usr_img(original_img_path,1)
     
     shape = user_image.show_demo_1()
     window_width = shape[1]
