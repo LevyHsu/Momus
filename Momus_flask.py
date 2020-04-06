@@ -37,13 +37,14 @@ def index():
 
 @app.route('/uploads', methods = ['POST'])
 def upload_img():
+    
     this_sessionkey = generate_key(8)
     file = request.files["file"]
     filename = secure_filename(file.filename)
     filename = this_sessionkey + os.path.splitext(filename)[1] 
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename);
 
-    if (os.path.splitext(filepath)[1] != ".png" and os.path.splitext(filepath)[1] != ".jpg" and os.path.splitext(filepath)[1] != ".PNG" and os.path.splitext(filepath)[1] != ".JPG"): 
+    if (os.path.splitext(filepath)[1] != ".png" and os.path.splitext(filepath)[1] != ".jpg" and os.path.splitext(filepath)[1] != ".PNG" and os.path.splitext(filepath)[1] != ".JPG" and os.path.splitext(filepath)[1] != ".jpeg" and os.path.splitext(filepath)[1] != ".JPEG"): 
         error_trace = json.dumps("Unsupported file type")
         session['error_trace'] = error_trace
         return redirect(url_for('.error', error_trace=error_trace))
@@ -104,7 +105,7 @@ def momus_img_processing(level,path):
 
 if __name__ == '__main__':
     app.secret_key = generate_key(20)
-    app.run(debug = False)
+    app.run(host= '0.0.0.0',port=80)
 '''
 Reference:
 https://link.springer.com/content/pdf/10.1186/1687-417X-2013-8.pdf
