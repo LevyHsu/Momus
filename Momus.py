@@ -3,7 +3,6 @@
 
 import os
 import PySimpleGUI as sg
-
 import cv2
 import random
 import image_processing

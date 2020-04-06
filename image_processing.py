@@ -74,8 +74,14 @@ class usr_img(image):
         self.output_name = os.path.splitext(self.img_path)[0] + "_output.png"
         cv2.imwrite(self.output_name, self.img)
         os.remove("demo.png")
-        
-    
+
+    def output_flask(self):   
+        if (self.not_png):
+            os.remove(self.img_path)
+        self.output_name = os.path.splitext(self.img_path)[0] + "_output.png"
+        cv2.imwrite(self.output_name, self.img)
+        return self.output_name
+
     def keypoint_obscure(self,pixel_number):
         sift = cv2.xfeatures2d.SIFT_create()
         keypoint, descriptors = sift.detectAndCompute(self.img,None)

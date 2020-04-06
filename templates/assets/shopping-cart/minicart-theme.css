@@ -1,0 +1,149 @@
+@font-face {
+    font-family: 'ShoppingCart';
+    src: url('shoppingcart.eot');
+    src: url('shoppingcart.eot#iefix') format('embedded-opentype'), url('shoppingcart.ttf') format('truetype'), url('shoppingcart.woff') format('woff'),
+        url('shoppingcart.svg#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+/* 
+  font was generated with iconmoon
+*/
+
+.shoppingcart-icons.icon-local_grocery_store:before {
+    content: '\e1df';
+}
+.shoppingcart-icons.icon-card_giftcard:before {
+    content: '\e308';
+}
+
+#PPMiniCart {
+    z-index: 3000;
+}
+
+#PPMiniCart .minicart-subtotal {
+    right: 10px;
+    left: auto !important;
+}
+.shoppingcart-icons {
+    font-family: 'ShoppingCart';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
+
+#mc-shopcart {
+    position: fixed;
+    z-index: 1040;
+    display: block;
+    font-size: 50px;
+    padding: 10px;
+    color: black;
+    border-radius: 50%;
+    background-color: rgba(250, 250, 250, 0.95);
+}
+#mc-shopcart span#mc-shopcart-qty {
+    font: 300 12px sans-serif;
+    position: absolute;
+    top: 2px;
+    right: -5px;
+    padding: 3px 7px;
+    white-space: nowrap;
+    color: #fff;
+    border-radius: 10px;
+    background-color: #05a;
+}
+#mc-shopcart span#mc-shopcart-qty:empty {
+    display: none;
+}
+
+#giftcard-to-shopcart {
+    border-radius: 50%;
+    padding: 3px;
+    position: absolute;
+    z-index: 10000;
+}
+#mc-shopcart {
+    cursor: pointer;
+}
+/*  */
+#exampleModal {
+    padding:0!important;
+    height:100%;
+}
+#exampleModal .item-cur {
+    padding-right: 0.5rem;
+}
+#exampleModal .variants > *:not(:nth-last-child(1)) {
+    margin-bottom: 1rem;
+}
+#exampleModal .old-price {
+    text-decoration: line-through;
+    color: #8d8d8d;
+}
+#exampleModal .modal-content {
+    height: auto;
+}
+#exampleModal .modal-dialog {
+    height: auto;
+}
+@media (max-width: 991px) {
+    #exampleModal .modal-body {
+        padding: 1rem;
+    }
+    #exampleModal .modal-dialog {
+        max-width: 100%;
+    }
+}
+@media (max-width:767px) {
+    #exampleModal .btn {
+        width:100%;
+    }
+}
+@media (min-width:992px) {
+    #exampleModal .modal-body {
+        padding: 2rem;
+    }
+    #exampleModal .modal-dialog {
+        max-width: 800px;
+    }
+}
+#exampleModal .close {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+#exampleModal .close:after {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 2px;
+    background-color: #cccccc;
+    top: 50%;
+    right: 5%;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+  }
+  #exampleModal .close:before {
+    content: "";
+    position: absolute;
+    width: 2px;
+    height: 30px;
+    background-color: #cccccc;
+    right: 50%;
+    top: 5%;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+  }
