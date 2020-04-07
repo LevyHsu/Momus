@@ -7,6 +7,7 @@ import string
 import os
 import json
 import image_processing
+from PIL import Image
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = './templates/usr_temp_files'
@@ -41,6 +42,8 @@ def upload_img():
     this_sessionkey = generate_key(8)
     file = request.files["file"]
     filename = secure_filename(file.filename)
+    print("-------------------------------")
+    print("New File upload: " + filename)
     filename = this_sessionkey + os.path.splitext(filename)[1] 
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename);
 
@@ -50,6 +53,17 @@ def upload_img():
         return redirect(url_for('.error', error_trace=error_trace))
     else:
         file.save(filepath)
+        file_size = os.path.getsize(filepath)
+        print("Saved Image Size: " + str(file_size/1000000) + "MB")
+        if (file_size>5120000):
+            os.remove(filepath)
+            print("File > 5MB, Dropped")    
+            error_trace = json.dumps("File greater than 5MB")
+            session['error_trace'] = error_trace
+            return redirect(url_for('.error', error_trace=error_trace))
+        elif (file_size>1024000):
+            print("File > 1MB, Compressed")    
+            large_image_processing(filepath)
         session_key = json.dumps(filename)
         session['session_key'] = session_key
         return redirect(url_for('.submission', session_key=session_key))
@@ -69,6 +83,8 @@ def pack_to_queue():
     
     if (request.form['file_name']!="" and request.form['target_similarity']!=""):
         name_temp = momus_img_processing(request.form['target_similarity'],"templates/" + request.form['file_name'])[10:]
+        print ("Success :" + name_temp)
+        print("-------------------------------")
         output_name = json.dumps(name_temp)
         session['output_name'] = output_name
         return redirect(url_for('.download_file', output_name=output_name))
@@ -102,6 +118,16 @@ def momus_img_processing(level,path):
     user_image.Random_Crop(random.randint(5,10))
     output_name = user_image.output_flask()
     return output_name
+
+def large_image_processing(filepath):
+    image = Image.open(filepath)
+    if (image.width > 8192 or image.height > 8192):
+        if (image.height > image.width):
+            factor = 8192 / image.height
+        else:
+            factor = 8192 / image.width
+    new_image = image.resize((int(image.width * factor), int(image.height * factor)))
+    new_image.save(filepath,quality=80,optimize=True)
 
 if __name__ == '__main__':
     app.secret_key = generate_key(20)
