@@ -124,11 +124,11 @@ def large_image_processing(filepath):
     image = Image.open(filepath)
     if(os.path.splitext(filepath)[1] ==".png" or os.path.splitext(filepath)[1] ==".PNG"):
         Image.composite(image, Image.new('RGB', image.size, 'white'), image).show()
-    if (image.width > 8192 or image.height > 8192):
+    if (image.width > 6144 or image.height > 6144):
         if (image.height > image.width):
-            factor = 8192 / image.height
+            factor = 6144 / image.height
         else:
-            factor = 8192 / image.width
+            factor = 6144 / image.width
     new_image = image.resize((int(image.width * factor), int(image.height * factor)))
     new_image.save(filepath,quality=80,optimize=True)
 
