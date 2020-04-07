@@ -120,7 +120,10 @@ def momus_img_processing(level,path):
     return output_name
 
 def large_image_processing(filepath):
+    factor = 1
     image = Image.open(filepath)
+    if(os.path.splitext(filepath)[1] ==".png" or os.path.splitext(filepath)[1] ==".PNG"):
+        Image.composite(image, Image.new('RGB', image.size, 'white'), image).show()
     if (image.width > 8192 or image.height > 8192):
         if (image.height > image.width):
             factor = 8192 / image.height
