@@ -842,7 +842,7 @@ blockquote {
 .lazy-none {
     display: block;
     position: relative;
-    padding-bottom: 0;
+    padding-bottom: 1%;
 }
 
 iframe.lazy-placeholder,
