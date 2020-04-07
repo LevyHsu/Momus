@@ -6,7 +6,8 @@
 #### Monus使用opencv库中的SIFT（Scale Invariant Feature Transform）算法来标记所有的关键点，然后添加噪音来避免社交平台的图片自动匹配
 ****
 ### Online Version(WITH FLASK):
-[Momus Online](https://momus.levyhsu.com/)<br/>
+[Momus Global](https://momus.levyhsu.com/)<br/>
+[Momus China](http://direct.momus.levyhsu.com/)<br/>
 ![](Demo/online_demo_1.png)
 ****
 ### Offline version(WITH GUI):
