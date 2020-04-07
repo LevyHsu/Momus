@@ -105,9 +105,10 @@
 
 
         <figure class="mbr-figure container">
-            <div class="image-block" style="width: 80%;">
+            <div id="content" class="image-block" style="width: 80%;">
                 <img src="{{ user_image }}" alt="User Image">
             </div>
+            <div id="loading"><img src="assets/images/loading.gif" style="width: 100%;" alt="loading_gif"></div>
         </figure>
     </section>
 
@@ -139,7 +140,7 @@
                             </div>
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <input type="hidden" id="file_name" name="file_name" value="{{ user_image }}">
-                                <input type="submit" class="btn btn-primary display-7">
+                                <input type="submit" class="btn btn-primary display-7" onclick="loading();">
                             </div>
 
                         </div>
@@ -149,6 +150,15 @@
             </div>
         </div>
     </section>
+
+    <script type="text/javascript">
+        // <![CDATA[
+        function loading() {
+            $("#loading").show();
+            $("#content").hide();
+        }
+        // ]]>
+    </script>
 
     <section class="cid-rVimsLU0So" id="footer1-1d">
 
