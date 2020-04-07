@@ -123,7 +123,7 @@ def large_image_processing(filepath):
     factor = 1
     image = Image.open(filepath)
     if(os.path.splitext(filepath)[1] ==".png" or os.path.splitext(filepath)[1] ==".PNG"):
-        Image.composite(image, Image.new('RGB', image.size, 'white'), image).show()
+       image.putalpha(255)
     if (image.width > 6144 or image.height > 6144):
         if (image.height > image.width):
             factor = 6144 / image.height
