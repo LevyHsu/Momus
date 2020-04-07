@@ -55,10 +55,10 @@ def upload_img():
         file.save(filepath)
         file_size = os.path.getsize(filepath)
         print("Saved Image Size: " + str(file_size/1000000) + "MB")
-        if (file_size>5120000):
+        if (file_size>20480000):
             os.remove(filepath)
-            print("File > 5MB, Dropped")    
-            error_trace = json.dumps("File greater than 5MB")
+            print("File > 20MB, Dropped")    
+            error_trace = json.dumps("File greater than 20MB")
             session['error_trace'] = error_trace
             return redirect(url_for('.error', error_trace=error_trace))
         elif (file_size>1024000):
