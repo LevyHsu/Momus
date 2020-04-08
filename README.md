@@ -55,7 +55,7 @@ Download Release:
 
 output file(Under same dir):
 ```
-output.png
+originalname_output.png
 ```
 Mac version is currently unavailable due to [Issue on tkinte under MacOS 10.14.6](https://discussions.apple.com/thread/250549297)<br/>
 
