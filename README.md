@@ -12,11 +12,18 @@
 [Momus China](http://direct.momus.levyhsu.com/)<br/>
 
 ![](Demo/online_demo_1.png)
+
 Extra library needed:
 ```
 flask
 ```
+Run:
+```bash
+python3 Momus_flask.py
+```
+
 ****
+
 ### Offline version(WITH GUI):
 Libraries:
 ```
