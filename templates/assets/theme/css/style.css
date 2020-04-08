@@ -10,7 +10,6 @@ div#loading {
     margin-right: auto;
     width: 25%;
     display: none;
-    background: url(assets/images/loading.gif) no-repeat;
 }
 
 section {
