@@ -38,7 +38,7 @@ Install:
 ```bash
 pip3 install -r requirements.txt
 ```
-run:
+Run:
 ```bash
 python3 Momus.py
 ```
