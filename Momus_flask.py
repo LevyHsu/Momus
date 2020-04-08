@@ -115,6 +115,11 @@ def momus_img_processing(level,path):
             user_image.keypoint_obscure(1)
             user_image.keypoint_white_black_salt(1)
             user_image.Random_Shape_Draw(40,25)
+    if (level == "superlow"):
+        for i in range(25):
+            user_image.keypoint_obscure(2)
+            user_image.keypoint_white_black_salt(2)
+            user_image.Random_Shape_Draw(50,25)
     user_image.Random_Crop(random.randint(5,10))
     output_name = user_image.output_flask()
     return output_name
