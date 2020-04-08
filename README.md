@@ -58,7 +58,7 @@ output file(Under same dir):
 originalname_output.png
 ```
 Mac version is currently unavailable due to [Issue on tkinte under MacOS 10.14.6](https://discussions.apple.com/thread/250549297)<br/>
-
+****
 ### Demo:
 #### Version: 1.2:
 ![](Demo/Momus_Demo.gif)
