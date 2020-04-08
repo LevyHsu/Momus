@@ -12,6 +12,10 @@
 [Momus China](http://direct.momus.levyhsu.com/)<br/>
 
 ![](Demo/online_demo_1.png)
+Extra library needed:
+```
+flask
+```
 ****
 ### Offline version(WITH GUI):
 Libraries:
