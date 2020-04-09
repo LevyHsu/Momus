@@ -136,20 +136,20 @@ class usr_img(image):
         amount1 = random.randint(0, Random_Shape_level)/counter
 
         for i in range(int(amount1)):
-            random_x_1 = random.randint(0,self.width)
-            random_x_2 = random.randint(0,self.width)
-            random_y_1 = random.randint(0,self.height)
-            random_y_2 = random.randint(0,self.height)
+            random_x_1 = random.randint(0,self.height)
+            random_x_2 = random.randint(0,self.height)
+            random_y_1 = random.randint(0,self.width)
+            random_y_2 = random.randint(0,self.width)
             colour1 = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
             self.img = cv2.line(self.img, (random_x_1, random_y_1), (random_x_2, random_y_2), colour1,random.randint(1,5))       
     
         amount2 = random.randint(0, Random_Shape_level)/counter*0.8
     
         for i in range(int(amount2)):
-            random_x_3 = random.randint(0,self.width)
-            random_x_4 = random.randint(0,self.width)
-            random_y_3 = random.randint(0,self.height)
-            random_y_4 = random.randint(0,self.height)
+            random_x_3 = random.randint(0,self.height)
+            random_x_4 = random.randint(0,self.height)
+            random_y_3 = random.randint(0,self.width)
+            random_y_4 = random.randint(0,self.width)
             colour2 = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
             self.img = cv2.rectangle(self.img, (random_x_3, random_y_3), (random_x_4, random_y_4), colour2, random.randint(1,5))
 
