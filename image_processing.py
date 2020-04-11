@@ -9,6 +9,7 @@ import cv2
 from matplotlib import pyplot as plt
 from PIL import Image
 
+# Unpack ketpoints
 def pickle_keypoints(keypoints, descriptors):
     i = 0
     temp_array = []
@@ -19,6 +20,7 @@ def pickle_keypoints(keypoints, descriptors):
         temp_array.append(temp)
     return temp_array
 
+# Resize image to fit GUI
 def img_resize_to_GUI(file_path):
     img = cv2.imread(file_path)
     width = img.shape[1]
@@ -47,6 +49,7 @@ class image:
         self.width = self.img.shape[0]
         self.height = self.img.shape[1]
 
+# Inheritance from image
 class usr_img(image):
     output_name = ''
     not_png = False
@@ -69,6 +72,7 @@ class usr_img(image):
             hmerge = np.hstack((cv2.imread(self.img_path), cv2.imread(self.img_path)))
             cv2.imwrite('demo.png', hmerge)
     
+    # Write file for GUI
     def output(self):
         if (self.not_png):
             os.remove(self.img_path)
@@ -76,6 +80,7 @@ class usr_img(image):
         cv2.imwrite(self.output_name, self.img)
         os.remove("demo.png")
 
+    # Write file for Flask
     def output_flask(self):   
         if (self.not_png):
             os.remove(self.img_path)
@@ -87,6 +92,7 @@ class usr_img(image):
         os.remove(self.output_name)
         return jpg_name
 
+    # Pick near pixel to reduce quality loss
     def keypoint_obscure(self,pixel_number):
         sift = cv2.xfeatures2d.SIFT_create()
         keypoint, descriptors = sift.detectAndCompute(self.img,None)
@@ -94,7 +100,7 @@ class usr_img(image):
 
         # x: kd_array[q][0][0]
         # y: kd_array[q][0][1]
-        #range: kd_array[q][1]
+        # range: kd_array[q][1]
 
         for q in range(len(kd_array)):
             for i in range(int(pixel_number)):
@@ -108,6 +114,7 @@ class usr_img(image):
                 else:
                     self.img[random_x_1,random_y_1] = self.img[random_x_2,random_y_2]
     
+    # Black and white injection
     def keypoint_white_black_salt(self,Salt_and_pepper_Noise_level):
         sift = cv2.xfeatures2d.SIFT_create()
         keypoint, descriptors = sift.detectAndCompute(self.img,None)
@@ -115,22 +122,19 @@ class usr_img(image):
 
         # x: kd_array[q][0][0]
         # y: kd_array[q][0][1]
-        #range: kd_array[q][1]
+        # range: kd_array[q][1]
    
         for q in range(len(kd_array)):
             for i in range(int(Salt_and_pepper_Noise_level)):
                 random_y_1 = round(kd_array[q][0][0] + random.uniform(-kd_array[q][1],kd_array[q][1]))
                 random_x_1 = round(kd_array[q][0][1] + random.uniform(-kd_array[q][1],kd_array[q][1])) 
-            
-                seed = random.randint(0, 1)
+
                 if(random_x_1 >= self.width or random_y_1 >= self.height or random_x_1 <= 0 or random_y_1 <= 0):
                     pass
                 else:
-                    if (seed == 0):
-                        self.img[random_x_1,random_y_1] = [255,255,255]
-                    else:
-                        self.img[random_x_1,random_y_1] = [0,0,0]
-
+                    self.img[random_x_1,random_y_1] = [255,255,255] if random.randint(0, 1) else [0,0,0]
+                        
+    # Draw line and box
     def Random_Shape_Draw(self,Random_Shape_level,counter):
 
         amount1 = random.randint(0, Random_Shape_level)/counter
@@ -153,17 +157,19 @@ class usr_img(image):
             colour2 = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
             self.img = cv2.rectangle(self.img, (random_x_3, random_y_3), (random_x_4, random_y_4), colour2, random.randint(1,5))
 
+    # Crop random pixels form edge. Aviod exact size match
     def Random_Crop(self,Random_Crop_Pixel):
         x = int(self.width - random.randint(5,Random_Crop_Pixel))
         y = int(self.height - random.randint(5,Random_Crop_Pixel))
         self.img = self.img[int(Random_Crop_Pixel):x,int(Random_Crop_Pixel):y]
     
-    
+    # Demo1: Original Image | Processed Image
     def show_demo_1(self):
         hmerge = np.hstack((cv2.imread(self.img_path), self.img))
         cv2.imwrite('demo.png', hmerge)
         return img_resize_to_GUI('demo.png')
     
+    # Demo2: Original Image | SIFT Keypoint
     def show_demo_2(self):
         img2_B = cv2.imread(self.img_path)
         sift = cv2.xfeatures2d.SIFT_create()
@@ -173,6 +179,7 @@ class usr_img(image):
         cv2.imwrite('demo.png', hmerge)
         img_resize_to_GUI('demo.png')
 
+    # Demo3: Show KNN match
     def show_demo_3(self):
         sift = cv2.xfeatures2d.SIFT_create()
         kp1, des1 = sift.detectAndCompute(cv2.imread(self.img_path),None)
@@ -180,11 +187,12 @@ class usr_img(image):
         bf = cv2.BFMatcher()
         matches = bf.knnMatch(des1,des2, k=2)
         good = []
+        
         for m,n in matches:
             if m.distance < 0.8*n.distance:
                 good.append([m])
+        
         imgC = cv2.drawMatchesKnn(cv2.imread(self.img_path),kp1,self.img,kp2,good[:10000],None,flags=2)
-        #print("Pair of matches: " + str(len(good)))
         cv2.imwrite('demo.png', imgC)
         img_resize_to_GUI('demo.png')
         
