@@ -97,9 +97,9 @@ class usr_img(image):
         sift = cv2.xfeatures2d.SIFT_create()
         keypoint, descriptors = sift.detectAndCompute(self.img,None)
         kd_array = pickle_keypoints(keypoint, descriptors)
-
-        # x: kd_array[q][0][0]
-        # y: kd_array[q][0][1]
+   
+        # x: kd_array[q][0][1]
+        # y: kd_array[q][0][0]
         # range: kd_array[q][1]
 
         for q in range(len(kd_array)):
@@ -120,8 +120,8 @@ class usr_img(image):
         keypoint, descriptors = sift.detectAndCompute(self.img,None)
         kd_array = pickle_keypoints(keypoint, descriptors)
 
-        # x: kd_array[q][0][0]
-        # y: kd_array[q][0][1]
+        # x: kd_array[q][0][1]
+        # y: kd_array[q][0][0]
         # range: kd_array[q][1]
    
         for q in range(len(kd_array)):
