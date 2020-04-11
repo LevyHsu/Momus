@@ -7,9 +7,7 @@
 ****
 ### Online Demo(WITH FLASK):
 
-[Momus Global](https://momus.levyhsu.com/)<br/>
-
-[Momus China](http://direct.momus.levyhsu.com/)<br/>
+[Momus Online](http://direct.momus.levyhsu.com/)<br/>
 
 ![](Demo/online_demo_1.png)
 
