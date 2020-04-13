@@ -9,7 +9,7 @@
 
 [Momus Online](http://direct.momus.levyhsu.com/)<br/>
 
-![](Demo/online_demo_1.png)
+![](Demo/online_demo_1.jpg)
 
 Extra library needed:
 ```
