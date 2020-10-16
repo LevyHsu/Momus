@@ -1,5 +1,5 @@
 # Momus
-### Momus is a cross-platform image processing tool that designed to counter AI censorship on social media platform.
+### Momus is a cross-platform image processing tool that designed to counter image matching on social media platform.
 ### Momus是一款用来绕过社交平台AI图片匹配的跨平台工具
 
 #### Monus uses SIFT（Scale Invariant Feature Transform） from opencv to detect all keypoint on img then inject noise to avoid auto-detection.
