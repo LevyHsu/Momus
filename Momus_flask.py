@@ -51,7 +51,8 @@ def upload_img():
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename);
 
     # if not image file
-    if (os.path.splitext(filepath)[1] != ".png" and os.path.splitext(filepath)[1] != ".jpg" and os.path.splitext(filepath)[1] != ".PNG" and os.path.splitext(filepath)[1] != ".JPG" and os.path.splitext(filepath)[1] != ".jpeg" and os.path.splitext(filepath)[1] != ".JPEG"): 
+    ext = os.path.splitext(filepath)[1].lower()
+    if ext not in (".png", ".jpg", ".jpeg"):
         error_trace = json.dumps("Unsupported file type")
         session['error_trace'] = error_trace
         return redirect(url_for('.error', error_trace=error_trace))
@@ -146,9 +147,10 @@ def momus_img_processing(level,path):
 def large_image_processing(filepath):
     factor = 0.8
     image = Image.open(filepath)
-    
-    if(os.path.splitext(filepath)[1] ==".png" or os.path.splitext(filepath)[1] ==".PNG"):
-       image.putalpha(255)
+
+    # For PNG, remove alpha channel to simplify downstream processing
+    if os.path.splitext(filepath)[1].lower() == ".png":
+        image = image.convert('RGB')
     
     if (image.width > 6144 or image.height > 6144):
         if (image.height > image.width):
@@ -156,7 +158,7 @@ def large_image_processing(filepath):
         else:
             factor = 6144 / image.width
     new_image = image.resize((int(image.width * factor), int(image.height * factor)))
-    new_image.save(filepath,quality=80,optimize=True)
+    new_image.save(filepath, quality=80, optimize=True)
 
 if __name__ == '__main__':
     app.secret_key = generate_key(20)

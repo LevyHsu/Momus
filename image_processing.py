@@ -11,12 +11,25 @@ from PIL import Image
 
 # Unpack ketpoints
 def pickle_keypoints(keypoints, descriptors):
-    i = 0
+    """Pair keypoints with descriptors safely.
+
+    OpenCV may return None for descriptors when no keypoints are found.
+    """
+    if keypoints is None or len(keypoints) == 0 or descriptors is None:
+        return []
     temp_array = []
-    for point in keypoints:
-        temp = (point.pt, point.size, point.angle, point.response, point.octave,
-        point.class_id, descriptors[i])     
-        ++i
+    for i, point in enumerate(keypoints):
+        if i >= len(descriptors):
+            break
+        temp = (
+            point.pt,
+            point.size,
+            point.angle,
+            point.response,
+            point.octave,
+            point.class_id,
+            descriptors[i],
+        )
         temp_array.append(temp)
     return temp_array
 
@@ -78,7 +91,8 @@ class usr_img(image):
             os.remove(self.img_path)
         self.output_name = os.path.splitext(self.img_path)[0] + "_output.png"
         cv2.imwrite(self.output_name, self.img)
-        os.remove("demo.png")
+        if os.path.exists("demo.png"):
+            os.remove("demo.png")
 
     # Write file for Flask
     def output_flask(self):   
@@ -95,73 +109,97 @@ class usr_img(image):
     # Pick near pixel to reduce quality loss
     def keypoint_obscure(self,pixel_number):
         sift = cv2.xfeatures2d.SIFT_create()
-        keypoint, descriptors = sift.detectAndCompute(self.img,None)
+        keypoint, descriptors = sift.detectAndCompute(self.img, None)
         kd_array = pickle_keypoints(keypoint, descriptors)
-   
+        
         # x: kd_array[q][0][1]
         # y: kd_array[q][0][0]
         # range: kd_array[q][1]
 
+        if not kd_array:
+            return
+
+        h, w = self.img.shape[:2]
         for q in range(len(kd_array)):
             for i in range(int(pixel_number)):
-                random_y_1 = round(kd_array[q][0][0] + random.uniform(-kd_array[q][1],kd_array[q][1]))
-                random_x_1 = round(kd_array[q][0][1] + random.uniform(-kd_array[q][1],kd_array[q][1]))
+                random_y_1 = round(kd_array[q][0][0] + random.uniform(-kd_array[q][1], kd_array[q][1]))
+                random_x_1 = round(kd_array[q][0][1] + random.uniform(-kd_array[q][1], kd_array[q][1]))
                 random_y_2 = random_y_1 + random.randint(-3, 3)
                 random_x_2 = random_x_1 + random.randint(-3, 3)
-            
-                if(random_x_1 >= self.width or random_x_2 >= self.width or random_y_1 >= self.height or random_y_2 >= self.height or random_y_1 <= 0 or random_x_1 <= 0 or random_y_2 <= 0 or random_x_2 <= 0):
-                    pass
-                else:
-                    self.img[random_x_1,random_y_1] = self.img[random_x_2,random_y_2]
+
+                if (
+                    random_x_1 <= 0 or random_x_1 >= w or
+                    random_y_1 <= 0 or random_y_1 >= h or
+                    random_x_2 <= 0 or random_x_2 >= w or
+                    random_y_2 <= 0 or random_y_2 >= h
+                ):
+                    continue
+                # Numpy images are indexed as [row(y), col(x)]
+                self.img[random_y_1, random_x_1] = self.img[random_y_2, random_x_2]
     
     # Black and white injection
     def keypoint_white_black_salt(self,Salt_and_pepper_Noise_level):
         sift = cv2.xfeatures2d.SIFT_create()
-        keypoint, descriptors = sift.detectAndCompute(self.img,None)
+        keypoint, descriptors = sift.detectAndCompute(self.img, None)
         kd_array = pickle_keypoints(keypoint, descriptors)
 
         # x: kd_array[q][0][1]
         # y: kd_array[q][0][0]
         # range: kd_array[q][1]
    
+        if not kd_array:
+            return
+
+        h, w = self.img.shape[:2]
         for q in range(len(kd_array)):
             for i in range(int(Salt_and_pepper_Noise_level)):
-                random_y_1 = round(kd_array[q][0][0] + random.uniform(-kd_array[q][1],kd_array[q][1]))
-                random_x_1 = round(kd_array[q][0][1] + random.uniform(-kd_array[q][1],kd_array[q][1])) 
+                random_y_1 = round(kd_array[q][0][0] + random.uniform(-kd_array[q][1], kd_array[q][1]))
+                random_x_1 = round(kd_array[q][0][1] + random.uniform(-kd_array[q][1], kd_array[q][1]))
 
-                if(random_x_1 >= self.width or random_y_1 >= self.height or random_x_1 <= 0 or random_y_1 <= 0):
-                    pass
-                else:
-                    self.img[random_x_1,random_y_1] = [255,255,255] if random.randint(0, 1) else [0,0,0]
+                if (
+                    random_x_1 <= 0 or random_x_1 >= w or
+                    random_y_1 <= 0 or random_y_1 >= h
+                ):
+                    continue
+                self.img[random_y_1, random_x_1] = [255, 255, 255] if random.randint(0, 1) else [0, 0, 0]
                         
     # Draw line and box
     def Random_Shape_Draw(self,Random_Shape_level,counter):
 
-        amount1 = random.randint(0, Random_Shape_level)/counter
+        h, w = self.img.shape[:2]
+        amount1 = random.randint(0, Random_Shape_level) / max(counter, 1)
 
         for i in range(int(amount1)):
-            random_x_1 = random.randint(0,self.height)
-            random_x_2 = random.randint(0,self.height)
-            random_y_1 = random.randint(0,self.width)
-            random_y_2 = random.randint(0,self.width)
-            colour1 = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
-            self.img = cv2.line(self.img, (random_x_1, random_y_1), (random_x_2, random_y_2), colour1,random.randint(1,5))       
-    
-        amount2 = random.randint(0, Random_Shape_level)/counter*0.8
-    
+            x1 = random.randint(0, max(w - 1, 0))
+            x2 = random.randint(0, max(w - 1, 0))
+            y1 = random.randint(0, max(h - 1, 0))
+            y2 = random.randint(0, max(h - 1, 0))
+            colour1 = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+            self.img = cv2.line(self.img, (x1, y1), (x2, y2), colour1, random.randint(1, 5))
+
+        amount2 = random.randint(0, Random_Shape_level) / max(counter, 1) * 0.8
+
         for i in range(int(amount2)):
-            random_x_3 = random.randint(0,self.height)
-            random_x_4 = random.randint(0,self.height)
-            random_y_3 = random.randint(0,self.width)
-            random_y_4 = random.randint(0,self.width)
-            colour2 = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
-            self.img = cv2.rectangle(self.img, (random_x_3, random_y_3), (random_x_4, random_y_4), colour2, random.randint(1,5))
+            x3 = random.randint(0, max(w - 1, 0))
+            x4 = random.randint(0, max(w - 1, 0))
+            y3 = random.randint(0, max(h - 1, 0))
+            y4 = random.randint(0, max(h - 1, 0))
+            colour2 = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+            self.img = cv2.rectangle(self.img, (x3, y3), (x4, y4), colour2, random.randint(1, 5))
 
     # Crop random pixels form edge. Aviod exact size match
     def Random_Crop(self,Random_Crop_Pixel):
-        x = int(self.width - random.randint(5,Random_Crop_Pixel))
-        y = int(self.height - random.randint(5,Random_Crop_Pixel))
-        self.img = self.img[int(Random_Crop_Pixel):x,int(Random_Crop_Pixel):y]
+        h, w = self.img.shape[:2]
+        max_margin_x = max(0, min(Random_Crop_Pixel, w // 2 - 1) if w > 2 else 0)
+        max_margin_y = max(0, min(Random_Crop_Pixel, h // 2 - 1) if h > 2 else 0)
+        if max_margin_x < 5 or max_margin_y < 5:
+            return
+        left = random.randint(5, max_margin_x)
+        top = random.randint(5, max_margin_y)
+        right = w - random.randint(5, max_margin_x)
+        bottom = h - random.randint(5, max_margin_y)
+        if right - left > 1 and bottom - top > 1:
+            self.img = self.img[top:bottom, left:right]
     
     # Demo1: Original Image | Processed Image
     def show_demo_1(self):
@@ -182,20 +220,25 @@ class usr_img(image):
     # Demo3: Show KNN match
     def show_demo_3(self):
         sift = cv2.xfeatures2d.SIFT_create()
-        kp1, des1 = sift.detectAndCompute(cv2.imread(self.img_path),None)
-        kp2, des2 = sift.detectAndCompute(self.img,None)
-        bf = cv2.BFMatcher()
-        matches = bf.knnMatch(des1,des2, k=2)
+        src_img = cv2.imread(self.img_path)
+        kp1, des1 = sift.detectAndCompute(src_img, None)
+        kp2, des2 = sift.detectAndCompute(self.img, None)
+
         good = []
-        
-        for m,n in matches:
-            if m.distance < 0.8*n.distance:
-                good.append([m])
-        
-        imgC = cv2.drawMatchesKnn(cv2.imread(self.img_path),kp1,self.img,kp2,good[:10000],None,flags=2)
+        if des1 is not None and des2 is not None and len(des1) > 0 and len(des2) > 0:
+            bf = cv2.BFMatcher()
+            matches = bf.knnMatch(des1, des2, k=2)
+            for m, n in matches:
+                if m.distance < 0.8 * n.distance:
+                    good.append([m])
+            imgC = cv2.drawMatchesKnn(src_img, kp1, self.img, kp2, good[:10000], None, flags=2)
+        else:
+            # Fallback: show side-by-side if no descriptors
+            imgC = np.hstack((src_img, self.img))
+
         cv2.imwrite('demo.png', imgC)
         img_resize_to_GUI('demo.png')
-        
+
         return len(good)
         
         
