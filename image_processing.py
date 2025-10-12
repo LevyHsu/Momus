@@ -54,13 +54,14 @@ def img_resize_to_GUI(file_path):
 
 class image:
     img = ''
-    width = 0
-    height = 0
+    img_width = 0   # cols (x)
+    img_height = 0  # rows (y)
 
     def __init__(self,path):
         self.img = cv2.imread(path)
-        self.width = self.img.shape[0]
-        self.height = self.img.shape[1]
+        # OpenCV images use shape (rows, cols, channels) => (height, width, c)
+        self.img_height = self.img.shape[0]
+        self.img_width = self.img.shape[1]
 
 # Inheritance from image
 class usr_img(image):
@@ -79,8 +80,8 @@ class usr_img(image):
             self.img_path = path
 
         self.img = cv2.imread(self.img_path)
-        self.width = self.img.shape[0]
-        self.height = self.img.shape[1]
+        self.img_height = self.img.shape[0]
+        self.img_width = self.img.shape[1]
         if(offline):
             hmerge = np.hstack((cv2.imread(self.img_path), cv2.imread(self.img_path)))
             cv2.imwrite('demo.png', hmerge)
