@@ -13,9 +13,9 @@ def img_processing_SIFT(mode,auto_target_similarity,original_img_path,counter,pi
     #1 for offline mode
     user_image = image_processing.usr_img(original_img_path,1)
     
-    shape = user_image.show_demo_1()
-    window_width = shape[1]
-    window_height = shape[0]
+    display_shape = user_image.show_demo_1()  # (height, width, channels)
+    display_height = display_shape[0]
+    display_width = display_shape[1]
 
     original_matches = user_image.show_demo_3()/3
     #print("original_matches: "+ str(original_matches))
@@ -23,11 +23,11 @@ def img_processing_SIFT(mode,auto_target_similarity,original_img_path,counter,pi
 
     sg.theme('DarkBlue')
     layout = [
-                [sg.Multiline(default_text='开始图像处理\n', size=(window_width, 2),key = '-TEXT-',do_not_clear=False)],
-                [sg.ProgressBar(100, orientation='h', size=(window_width, 20), key='progressbar')],
-                [sg.Image('demo.png',key = '-IMAGE-')],
+                [sg.Multiline(default_text='开始图像处理\n', size=(display_width, 2), key='-TEXT-', do_not_clear=False)],
+                [sg.ProgressBar(100, orientation='h', size=(display_width, 20), key='progressbar')],
+                [sg.Image('demo.png', key='-IMAGE-')],
           ]
-    window = sg.Window('Momus 图像反识别工具',layout,no_titlebar=True, size=(window_width + 2, window_height + 30))
+    window = sg.Window('Momus 图像反识别工具', layout, no_titlebar=True, size=(display_width + 2, display_height + 30))
     progress_bar = window['progressbar']
     counter_current = 0
     
